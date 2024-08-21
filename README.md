@@ -6,12 +6,27 @@
 ### Installation
 Using lazy.nvim:
 
+* if you want to use it as a plugin: 
 ```
 {
     'downzed/phosmon.nvim',
     opts = {}
 }
 ```
+Which will set `phosmon` as the default colorscheme and will load some *functionality:<br />
+- [x] `Phosmon toggle opacity`
+- [ ] `Phosmon toggle light/dark`
+
+- or, if you want to use it as a colorscheme: 
+```
+{ 'downzed/phosmon.nvim' }
+```
+Then somewhere in your code `vim.cmd('colorscheme phosmon')`.
+
+You can _obviously_ call:
+- `require('phosmon').setup()` - to load the plugin
+- or `require('phosmon').toggle_opacity("#bgcolorofyourchoise")`
+
 
 ### Integrations
 - [ ] light theme

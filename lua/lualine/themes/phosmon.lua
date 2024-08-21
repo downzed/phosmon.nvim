@@ -29,6 +29,5 @@ local phosmon = {
 phosmon.visual = phosmon.insert
 phosmon.replace = phosmon.insert
 phosmon.command = phosmon.insert
-phosmon.inactive = phosmon.insert
 
 return phosmon

@@ -1,12 +1,15 @@
 local utils = require("utils")
 local M = {}
 
-M.set_commands = function(colors)
+---@description Set phosmon colorscheme commands
+---@return nil
+---@usage `Phosmon toggle opacity`
+M.set_commands = function()
   vim.api.nvim_create_user_command('Phosmon', function(opts)
     local args = vim.split(opts.args, " ")
     if #args == 2 and args[1] == "toggle" then
       if args[2] == "opacity" then
-        utils.toggle_opacity(colors)
+        utils.toggle_opacity()
       else
         print("only 'toggle opacity' is supported rn")
       end

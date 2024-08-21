@@ -4,37 +4,39 @@ local cmds = require('cmds')
 local colors = {
   fg = "#c6c6c6",
   bg = "#262626",
+  mostly_black_too = "#1c1c1c",
+  mostly_black = "#303030",
+  not_so_black = "#262626",
+  dark_gray = "#3a3a3a",
   constant = "#af87d7",
   comment = "#626262",
-  mostly_black = "#303030",
-  mostly_black_too = "#1c1c1c",
-  not_so_black = "#262626",
   very_dark_gray = "#444444",
-  dark_gray = "#3a3a3a",
   gray = "#767676",
   dark_grayish_green = "#87af87",
   red = "#d75f5f",
   dark_pink = "#af5f87",
   gold = "#d7af5f",
+  teal = "#5f8787"
 }
 
 local highlights = {
   Normal = { bg = colors.bg, fg = colors.fg },
   NonText = { bg = colors.bg, fg = colors.very_dark_gray },
-  EndOfBuffer = { bg = colors.bg, fg = colors.bg },
-  Comment = { bg = colors.bg, fg = colors.comment, italic = true },
+  EndOfBuffer = { bg = "NONE", fg = colors.bg },
+  FloatBorder = { bg = "NONE", fg = colors.bg },
+  Comment = { fg = colors.comment, italic = true },
   Conceal = { bg = colors.bg, fg = colors.comment },
-  Constant = { bg = colors.bg, fg = colors.constant },
-  Identifier = { bg = colors.bg, fg = colors.fg },
-  Statement = { bg = colors.bg, fg = colors.gray },
-  Operator = { bg = colors.bg, fg = colors.fg },
+  Constant = { bg = "NONE", fg = colors.constant },
+  Identifier = { bg = "NONE", fg = colors.fg },
+  Statement = { bg = "NONE", fg = colors.gray },
+  Operator = { bg = "NONE", fg = colors.fg },
   PreProc = { bg = colors.bg, fg = colors.gray },
-  Type = { bg = colors.bg, fg = colors.fg },
+  Type = { bg = "NONE", fg = colors.teal },
   Special = { bg = "NONE", fg = colors.gray },
-  Error = { bg = "NONE", fg = colors.red },
+  Error = { bg = "NONE", fg = colors.red, bold = true },
   Warning = { bg = "NONE", fg = colors.gold },
   ModeMsg = { bg = "NONE", fg = colors.gray },
-  Todo = { bg = colors.fg, fg = colors.dark_pink, bold = true },
+  Todo = { bg = colors.bg, fg = colors.dark_pink, bold = true },
   Underlined = { bg = "NONE", fg = colors.fg, underline = true },
   StatusLine = { bg = colors.dark_gray, fg = colors.constant },
   StatusLineNC = { bg = colors.mostly_black, fg = colors.gray },
@@ -42,13 +44,13 @@ local highlights = {
   VertSplit = { bg = colors.mostly_black, fg = colors.mostly_black },
   Title = { bg = "NONE", fg = colors.fg, bold = true },
   LineNr = { bg = "NONE", fg = colors.very_dark_gray },
-  CursorLineNr = { bg = colors.bg, fg = colors.constant },
+  CursorLineNr = { bg = colors.mostly_black, fg = colors.constant },
   Cursor = { bg = colors.constant, fg = colors.fg },
-  CursorLine = { bg = colors.mostly_black_too, fg = "NONE" },
-  ColorColumn = { bg = colors.mostly_black_too, fg = "NONE" },
+  CursorLine = { bg = colors.mostly_black, fg = "NONE" },
+  ColorColumn = { bg = colors.mostly_black, fg = "NONE" },
   SignColumn = { bg = "NONE", fg = colors.gray },
-  Visual = { bg = colors.dark_gray, fg = "NONE" },
-  VisualNOS = { bg = colors.very_dark_gray, fg = "NONE" },
+  Visual = { bg = colors.gray, fg = "NONE" },
+  VisualNOS = { bg = colors.dark_gray, fg = "NONE" },
   Pmenu = { bg = colors.dark_gray, fg = "NONE" },
   PmenuSbar = { bg = colors.mostly_black, fg = "NONE" },
   PmenuSel = { bg = colors.mostly_black, fg = colors.constant },
@@ -72,7 +74,6 @@ local highlights = {
   helpHyperTextJump = { fg = colors.red, bg = colors.bg },
 
   -- TS
-
   ["@none"] = { bg = "NONE", fg = "NONE" },
   ["@markup.strong"] = { bold = true },
   ["@markup.underline"] = { underline = true },
@@ -82,7 +83,6 @@ local highlights = {
   ["@text.underline"] = { underline = true },
   ["@text.strike"] = { strikethrough = true },
 }
-
 
 local links = {
   Character = "Constant",
@@ -272,12 +272,16 @@ phosmon.load = function()
 
   utils.apply_highlights(highlights)
   utils.apply_highlights(mini_starter_hl)
+
+  vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+    border = "none",
+  })
 end
 
 
 phosmon.setup = function(_config)
   phosmon.load()
-  cmds.set_commands(colors)
+  cmds.set_commands()
 end
 
 phosmon.colors = colors
