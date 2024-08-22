@@ -1,34 +1,25 @@
-local M = {}
+local Utils = {}
 
 ---@description Applying highlights
 ---@param groups table
 ---@usage groups = { Character = { bg = "NONE", fg = colors.fg } }
-M.apply_highlights = function(groups)
+Utils.apply_highlights = function(groups)
   for hl, props in pairs(groups) do
     vim.api.nvim_set_hl(0, hl, {
       bg = props.bg or "NONE",
       fg = props.fg or "NONE",
-      italic = props.italic and true or false,
-      bold = props.bold and true or false,
-      underline = props.underline and true or false,
-      strikethrough = props.strikethrough and true or false,
-      link = props.link or nil,
-      nocombine = props.nocombine or nil,
+      italic = props.italic == true,
+      bold = props.bold == true,
+      underline = props.underline == true,
+      strikethrough = props.strikethrough == true,
+      link = props.link,
+      nocombine = props.nocombine,
     })
   end
 end
 
----@description Applying links
----@param links table
----@usage links = { Character = "Constant" }
-M.apply_links = function(links)
-  for from, to in pairs(links) do
-    vim.api.nvim_set_hl(0, from, { link = to })
-  end
-end
-
 ---@usage `require('phosmon').toggle_opacity()`
-M.toggle_opacity = function()
+Utils.toggle_opacity = function()
   local default_bg = require("config").palette.normal_bg
 
   local hl_groups = {
@@ -52,7 +43,7 @@ M.toggle_opacity = function()
   end
 end
 
-M.set_hlgroups = function()
+Utils.set_hlgroups = function()
   local config = require('config')
   local palette = config.palette
 
@@ -86,8 +77,8 @@ M.set_hlgroups = function()
     CursorLine = { bg = palette.cursorline_bg, fg = false },
     ColorColumn = { bg = palette.cursorline_bg, fg = false },
     SignColumn = { bg = false, fg = palette.statement_fg },
-    Visual = { bg = palette.statusline_bg, fg = false },
-    VisualNOS = { bg = palette.statusline_bg, fg = false },
+    Visual = { bg = palette.visual_bg, fg = false },
+    VisualNOS = { bg = palette.visualnos_bg, fg = false },
     Pmenu = { bg = palette.statusline_bg, fg = false },
     PmenuSbar = { bg = palette.cursorline_bg, fg = false },
     PmenuSel = { bg = palette.cursorline_bg, fg = palette.constant_fg },
@@ -122,16 +113,15 @@ M.set_hlgroups = function()
   }
 
   local l = require("links")
-  M.apply_highlights(highlights)
-  M.apply_highlights(l.ministarter_hl)
-  M.apply_links(l.links)
+  local hl_groups = vim.tbl_extend("force", highlights, l.links)
+  Utils.apply_highlights(hl_groups)
 
   if config.transparent then
-    M.toggle_opacity()
+    Utils.toggle_opacity()
   end
 end
 
-M.toggle_dark_mode = function()
+Utils.toggle_dark_mode = function()
   if vim.o.background == "dark" then
     vim.o.background = "light"
     require("config").palette = require("palette").light
@@ -139,6 +129,7 @@ M.toggle_dark_mode = function()
     vim.o.background = "dark"
     require("config").palette = require("palette").dark
   end
+  Utils.set_hlgroups()
 end
 
-return M
+return Utils
