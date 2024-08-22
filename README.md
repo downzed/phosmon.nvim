@@ -4,29 +4,29 @@
 `phosmon.nvim` is a minimal, monotone (as possible) colorscheme designed for Neovim, trying to preserve the aesthetics of the original `photon.vim` theme while using the benefits of Lua.
 
 ### Installation
-Using lazy.nvim:
+##### Using lazy.nvim:
 
-* if you want to use it as a plugin: 
+If you want to use it as a plugin: 
 ```
 {
     'downzed/phosmon.nvim',
-    opts = {}
+    -- leave empty for default options and default colorscheme set up
+    opts = {
+        -- default options
+        light = false, -- in progress
+        transparent = false,
+    }
 }
 ```
-Which will set `phosmon` as the default colorscheme and will load some *functionality:<br />
+Which will set `phosmon` as the default colorscheme and will load some perks:<br />
 - [x] `Phosmon toggle opacity`
-- [ ] `Phosmon toggle light/dark`
+- [ ] `Phosmon toggle dark_mode`
 
-- or, if you want to use it as a colorscheme: 
+If you want to do it yourself:
 ```
 { 'downzed/phosmon.nvim' }
 ```
 Then somewhere in your code `vim.cmd('colorscheme phosmon')`.
-
-You can _obviously_ call:
-- `require('phosmon').setup()` - to load the plugin
-- or `require('phosmon').toggle_opacity("#bgcolorofyourchoise")`
-
 
 ### Integrations
 - [ ] light theme

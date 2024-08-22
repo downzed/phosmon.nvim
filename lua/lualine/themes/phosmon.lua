@@ -1,28 +1,23 @@
-local colors = require("phosmon").colors
-
-local common_bg = colors.bg
--- config.transparent and "NONE" or colors.bg
-local bold_fg = true
--- config.bold and "bold" or "NONE"
+local palette = require("phosmon").palette
 
 local phosmon = {
   normal = {
-    a = { bg = common_bg, fg = colors.fg, gui = "bold" },
-    b = { bg = colors.dark_gray, fg = colors.comment },
-    c = { bg = colors.comment, fg = colors.bg },
-    z = { bg = common_bg, fg = colors.comment },
+    a = { bg = palette.normal_bg, fg = palette.normal_fg, gui = "bold" },
+    b = { bg = palette.statusline_bg, fg = palette.comment_fg },
+    c = { bg = palette.comment_fg, fg = palette.normal_bg },
+    z = { bg = palette.normal_bg, fg = palette.comment_fg },
   },
   insert = {
-    a = { bg = common_bg, fg = colors.constant, gui = "bold" },
-    b = { bg = colors.dark_gray, fg = colors.fg },
-    c = { bg = colors.comment, fg = colors.fg },
-    z = { bg = common_bg, fg = colors.comment },
+    a = { bg = palette.normal_bg, fg = palette.constant_fg, gui = "bold" },
+    b = { bg = palette.statusline_bg, fg = palette.comment_fg },
+    c = { bg = palette.comment_fg, fg = palette.normal_fg },
+    z = { bg = palette.normal_bg, fg = palette.comment_fg },
   },
   inactive = {
-    a = { bg = colors.dark_gray, fg = colors.comment },
-    b = { bg = colors.dark_gray, fg = colors.comment },
-    c = { bg = colors.dark_gray, fg = colors.comment },
-    z = { bg = common_bg, fg = colors.comment },
+    a = { bg = palette.statusline_bg, fg = palette.comment_fg },
+    b = { bg = palette.statusline_bg, fg = palette.comment_fg },
+    c = { bg = palette.statusline_bg, fg = palette.comment_fg },
+    z = { bg = palette.normal_bg, fg = palette.comment_fg },
   },
 }
 
