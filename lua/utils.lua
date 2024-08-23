@@ -18,10 +18,14 @@ Utils.apply_highlights = function(groups)
   end
 end
 
----@usage `require('phosmon').toggle_opacity()`
+--- @name phosmon toggle opacity
+--- @usage `require('phosmon').toggle_opacity()`
 Utils.toggle_opacity = function()
+  if require("config").mode == "light" then
+    vim.notify_once("phosmon.nvim: can't toggle opacity in light mode")
+    return
+  end
   local default_bg = require("config").palette.normal_bg
-
   local hl_groups = {
     "Normal",
     "SignColumn",
@@ -59,8 +63,8 @@ Utils.set_hlgroups = function()
     Statement = { bg = false, fg = palette.statement_fg },
     Operator = { bg = false, fg = palette.normal_fg },
     PreProc = { bg = palette.normal_bg, fg = palette.statement_fg },
-    Type = { bg = false, fg = palette.type_fg },
-    Special = { bg = false, fg = palette.statement_fg },
+    Type = { bg = false, fg = palette.type_fg, bold = true },
+    Special = { bg = false, fg = palette.statement_fg, italic = true },
     Error = { bg = false, fg = palette.error_fg, bold = true },
     Warning = { bg = false, fg = palette.warning_fg },
     ModeMsg = { bg = false, fg = palette.statement_fg },
@@ -113,7 +117,16 @@ Utils.set_hlgroups = function()
   }
 
   local l = require("links")
-  local hl_groups = vim.tbl_extend("force", highlights, l.links)
+  local hl_groups = vim.tbl_extend("force", highlights, l.get_base_links())
+
+  if config.enable.fzf_lua then
+    hl_groups = vim.tbl_extend("force", hl_groups, l.get_fzf_lua())
+  end
+
+  if config.enable.ministarter then
+    hl_groups = vim.tbl_extend("force", hl_groups, l.get_ministarter())
+  end
+
   Utils.apply_highlights(hl_groups)
 
   if config.transparent then
@@ -122,13 +135,17 @@ Utils.set_hlgroups = function()
 end
 
 Utils.toggle_dark_mode = function()
+  local mode = ""
   if vim.o.background == "dark" then
-    vim.o.background = "light"
-    require("config").palette = require("palette").light
+    mode = "light"
   else
-    vim.o.background = "dark"
-    require("config").palette = require("palette").dark
+    mode = "dark"
   end
+
+  vim.o.background = mode
+  require("config").mode = mode
+  require("config").palette = require("palette")[mode]
+
   Utils.set_hlgroups()
 end
 

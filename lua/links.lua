@@ -179,6 +179,28 @@ local ministarter_hl = {
   MiniStarterQuery = { link = "Constant" },
 }
 
-L.links = vim.tbl_extend("force", ministarter_hl, links) -- merge (ministarter_hl, links)
+local fzf_lua_highlights = {
+  FzfLuaNormal = { link = "Normal" },
+  FzfLuaBorder = { link = "FloatBorder" },
+  FzfLuaCursorLine = { link = "CursorLine" },
+  FzfLuaSearch = { link = "IncSearch" },
+  FzfLuaTitle = { link = "Title" },
+  FzfLuaPrompt = { link = "Comment" },
+  FzfLuaPointer = { link = "CursorLineNr" },
+  FzfLuaMarker = { link = "CursorLineNr" },
+  FzfLuaPreviewNormal = { link = "Constant" },
+}
+
+L.get_base_links = function()
+  return links
+end
+
+L.get_ministarter = function()
+  return ministarter_hl
+end
+
+L.get_fzf_lua = function()
+  return fzf_lua_highlights
+end
 
 return L

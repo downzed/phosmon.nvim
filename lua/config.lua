@@ -1,24 +1,30 @@
 local M = {
   palette = {},
-  transparent = false
+  transparent = false,
+  mode = "dark",
+  enable = {
+    ministarter = true,
+    fzf_lua = true
+  }
 }
 
 --- Set Neovim base for the colorscheme
 M.set_theme = function(user_config)
   local p = require('palette')
-  local palette = p.dark
-  local vim_bg = "dark"
 
   if user_config ~= nil then
     M.transparent = user_config.transparent
 
-    if user_config.light then
-      palette = p.light
-      vim_bg = "light"
+    if user_config.mode ~= nil then
+      if user_config.mode ~= "dark" and user_config.mode ~= "light" then
+        vim.notify_once("phosmon.nvim: 'mode' must be 'dark' or 'light'")
+      else
+        M.mode = user_config.mode
+      end
     end
-    M.palette = palette
-  end
 
+    M.palette = p[M.mode]
+  end
 
   if vim.version().minor < 9 then
     vim.notify_once("phosmon.nvim: you must use neovim 0.9 or higher")
@@ -34,7 +40,11 @@ M.set_theme = function(user_config)
 
   vim.g.colors_name = "phosmon"
   vim.o.termguicolors = true
-  vim.o.background = vim_bg
+  vim.o.background = M.mode
+end
+
+M.get_current_mode = function()
+  return M.mode
 end
 
 return M;

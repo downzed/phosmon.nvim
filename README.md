@@ -13,8 +13,12 @@ If you want to use it as a plugin:
     -- leave empty for default options and default colorscheme set up
     opts = {
         -- default options
-        light = false, -- in progress
+        mode = "dark", -- or "light"
         transparent = false,
+        enable = {
+            fzf_lua = true,
+            ministarter = true,
+        }
     }
 }
 ```
