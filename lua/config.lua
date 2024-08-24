@@ -2,9 +2,10 @@ local M = {
   palette = {},
   transparent = false,
   mode = "dark",
+  cursor_pulse = false,
   enable = {
     ministarter = true,
-    fzf_lua = true
+    fzf_lua = false
   }
 }
 
@@ -24,6 +25,11 @@ M.set_theme = function(user_config)
     end
 
     M.palette = p[M.mode]
+    M.enable = vim.tbl_deep_extend(
+      'force',
+      M.enable,
+      user_config.enable or {}
+    )
   end
 
   if vim.version().minor < 9 then

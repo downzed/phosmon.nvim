@@ -70,7 +70,7 @@ Utils.set_hlgroups = function()
     ModeMsg = { bg = false, fg = palette.statement_fg },
     Todo = { bg = palette.normal_bg, fg = palette.todo_fg, bold = true },
     Underlined = { bg = false, fg = palette.normal_fg, underline = true },
-    StatusLine = { bg = palette.statusline_bg, fg = palette.constant_fg },
+    StatusLine = { bg = palette.statusline_bg, fg = palette.statusline_fg },
     StatusLineNC = { bg = palette.cursorline_bg, fg = palette.statement_fg },
     WildMenu = { bg = palette.cursorline_bg, fg = palette.error_fg },
     VertSplit = { bg = palette.cursorline_bg, fg = palette.floatborder_bg },
@@ -132,6 +132,12 @@ Utils.set_hlgroups = function()
   if config.transparent then
     Utils.toggle_opacity()
   end
+  if config.transparent then
+    Utils.toggle_opacity()
+  end
+  if config.cursor_pulse then
+    Utils.toggle_cursor_pulse()
+  end
 end
 
 Utils.toggle_dark_mode = function()
@@ -147,6 +153,43 @@ Utils.toggle_dark_mode = function()
   require("config").palette = require("palette")[mode]
 
   Utils.set_hlgroups()
+end
+
+local is_pulse_on = false
+Utils.toggle_cursor_pulse = function()
+  -- Define highlight groups
+  if is_pulse_on then
+    vim.api.nvim_set_hl(0, 'Cursor', { link = 'CursorNormal' })
+    is_pulse_on = false
+    return
+  end
+  local p = require("config").palette
+  vim.api.nvim_set_hl(0, 'CursorNormal', { fg = '#c6c6c6', bg = '#af87d7' })
+  vim.api.nvim_set_hl(0, 'CursorPulse', { fg = '#c6c6c6', bg = '#d7af87' })
+
+  -- Toggle function
+
+  local function toggle_cursor_pulse()
+    if is_pulse_on then
+      vim.api.nvim_set_hl(0, 'Cursor', { link = 'CursorNormal' })
+    else
+      vim.api.nvim_set_hl(0, 'Cursor', { link = 'CursorPulse' })
+    end
+    is_pulse_on = not is_pulse_on
+  end
+
+  -- Timer setup
+  local pulse_interval = 500 -- 500ms pulse interval
+  local pulse_timer = vim.loop.new_timer()
+
+  pulse_timer:start(0, pulse_interval, vim.schedule_wrap(function()
+    toggle_cursor_pulse()
+  end))
+
+  -- Stop the timer on exit
+  vim.cmd([[
+    autocmd VimLeavePre * lua pulse_timer:stop()
+]])
 end
 
 return Utils

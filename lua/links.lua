@@ -1,6 +1,6 @@
 local L = {}
 
-local links = {
+local base_links = {
   Character = { link = "Constant" },
   Number = { link = "Constant" },
   Float = { link = "Number" },
@@ -179,20 +179,26 @@ local ministarter_hl = {
   MiniStarterQuery = { link = "Constant" },
 }
 
-local fzf_lua_highlights = {
-  FzfLuaNormal = { link = "Normal" },
-  FzfLuaBorder = { link = "FloatBorder" },
-  FzfLuaCursorLine = { link = "CursorLine" },
-  FzfLuaSearch = { link = "IncSearch" },
-  FzfLuaTitle = { link = "Title" },
-  FzfLuaPrompt = { link = "Comment" },
-  FzfLuaPointer = { link = "CursorLineNr" },
-  FzfLuaMarker = { link = "CursorLineNr" },
-  FzfLuaPreviewNormal = { link = "Constant" },
-}
+local fzf_lua_highlights = function()
+  local config = require('config')
+  local palette = config.palette
+
+  local fzf_hl = {
+    FzfLuaNormal = { bg = palette.normal_bg, fg = palette.normal_fg },
+    FzfLuaBorder = { bg = palette.normal_bg, fg = palette.comment_fg },
+    FzfLuaCursorLine = { bg = palette.cursorline_bg, fg = palette.cursor_fg },
+    FzfLuaSearch = { bg = palette.incsearch_bg, fg = palette.search_bg },
+    FzfLuaTitle = { bg = palette.normal_bg, fg = palette.title_fg, bold = true },
+    FzfLuaPrompt = { bg = palette.normal_bg, fg = palette.comment_fg },
+    FzfLuaPointer = { bg = palette.normal_bg, fg = palette.warning_fg },
+    FzfLuaMarker = { bg = palette.normal_bg, fg = palette.error_fg },
+  }
+
+  return fzf_hl
+end
 
 L.get_base_links = function()
-  return links
+  return base_links
 end
 
 L.get_ministarter = function()
@@ -200,7 +206,7 @@ L.get_ministarter = function()
 end
 
 L.get_fzf_lua = function()
-  return fzf_lua_highlights
+  return fzf_lua_highlights()
 end
 
 return L

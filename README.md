@@ -16,7 +16,6 @@ If you want to use it as a plugin:
         mode = "dark", -- or "light"
         transparent = false,
         enable = {
-            fzf_lua = true,
             ministarter = true,
         }
     }

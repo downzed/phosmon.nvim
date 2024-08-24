@@ -12,6 +12,8 @@ M.set_commands = function()
         utils.toggle_opacity()
       elseif args[2] == "dark_mode" then
         utils.toggle_dark_mode()
+      elseif args[2] == "cursor_pulse" then
+        utils.toggle_cursor_pulse()
       else
         print("only 'toggle opacity' is supported rn")
       end
@@ -28,7 +30,11 @@ M.set_commands = function()
       if #cmd_parts == 2 then
         complete_args = { "toggle" }
       elseif #cmd_parts == 3 and cmd_parts[2] == "toggle" then
-        complete_args = { "opacity", "dark_mode" }
+        complete_args = {
+          "opacity",
+          "dark_mode",
+          "cursor_pulse",
+        }
       end
 
       return complete_args

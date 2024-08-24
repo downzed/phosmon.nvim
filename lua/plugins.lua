@@ -60,28 +60,4 @@ plugins.load_lualine = function()
   end
 end
 
-plugins.load_fzflua = function()
-  local ok, _ = pcall(require, 'fzf-lua')
-  if not ok then
-    return
-  end
-
-  local palette = require('config').palette
-
-  local fzf_lua_highlights = {
-    FzfLuaNormal = { link = "Normal" },
-    FzfLuaBorder = { link = "FloatBorder" },
-    FzfLuaCursorLine = { link = "CursorLine" },
-    FzfLuaSearch = { link = "IncSearch" },
-    FzfLuaTitle = { link = "Title" },
-    FzfLuaPrompt = { link = "Comment" },
-    FzfLuaPointer = { link = "CursorLineNr" },
-    FzfLuaMarker = { link = "CursorLineNr" },
-    FzfLuaPreviewNormal = { link = "Constant" },
-  }
-
-  print(vim.inspect(fzf_lua_highlights))
-  require('utils').apply_highlights(fzf_lua_highlights)
-end
-
 return plugins
