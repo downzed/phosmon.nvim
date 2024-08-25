@@ -1,4 +1,4 @@
-local utils = require("utils")
+local theme = require("phosmon.theme")
 local M = {}
 
 ---@description Set phosmon colorscheme commands
@@ -9,16 +9,12 @@ M.set_commands = function()
     local args = vim.split(opts.args, " ")
     if #args == 2 and args[1] == "toggle" then
       if args[2] == "opacity" then
-        utils.toggle_opacity()
+        theme.toggle_opacity()
       elseif args[2] == "dark_mode" then
-        utils.toggle_dark_mode()
-      elseif args[2] == "cursor_pulse" then
-        utils.toggle_cursor_pulse()
-      else
-        print("only 'toggle opacity' is supported rn")
+        theme.toggle_dark_mode()
       end
     else
-      print("Invalid phosmon command")
+      vim.notify("phosmon.nvim: invalid phosmon command")
     end
   end, {
     nargs = "*",
@@ -33,7 +29,6 @@ M.set_commands = function()
         complete_args = {
           "opacity",
           "dark_mode",
-          "cursor_pulse",
         }
       end
 

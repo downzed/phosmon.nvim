@@ -1,2 +1,2 @@
-local phosmon = require("plugins").load_lualine()
+local phosmon = require("phosmon.plugins").load_lualine()
 return phosmon
