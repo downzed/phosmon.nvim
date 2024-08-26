@@ -193,16 +193,23 @@ end
 
 local fzf_lua_highlights = function()
   local palette = require('phosmon.colors').get_palette()
+  local is_light = require('phosmon.config').get_current_mode() == 'light'
 
   local fzf_hl = {
-    FzfLuaNormal = { bg = palette.normal_bg, fg = palette.normal_fg },
-    FzfLuaBorder = { bg = palette.normal_bg, fg = palette.comment_fg },
-    FzfLuaCursorLine = { bg = palette.cursorline_bg, fg = palette.cursor_fg },
-    FzfLuaSearch = { bg = palette.incsearch_bg, fg = palette.search_bg },
-    FzfLuaTitle = { bg = palette.normal_bg, fg = palette.title_fg, bold = true },
-    FzfLuaPrompt = { bg = palette.normal_bg, fg = palette.comment_fg },
-    FzfLuaPointer = { bg = palette.normal_bg, fg = palette.warning_fg },
-    FzfLuaMarker = { bg = palette.normal_bg, fg = palette.error_fg },
+    FzfLuaBorder        = { fg = palette.dark_gray, bg = palette.bg },                           -- Dark gray border with the background color
+    FzfLuaCursor        = "IncSearch",                                                           -- Matches the IncSearch highlighting for consistency
+    FzfLuaDirPart       = { fg = is_light and palette.mid_gray or palette.dark_gray },           -- Mid gray for directory parts in light mode, dark gray in dark mode
+    FzfLuaFilePart      = { fg = palette.fg },                                                   -- Normal foreground color for file parts
+    FzfLuaFzfCursorLine = "Visual",                                                              -- Uses Visual highlight group for selected lines
+    FzfLuaFzfNormal     = { fg = palette.fg },                                                   -- Normal text foreground color
+    FzfLuaFzfPointer    = { fg = is_light and palette.pink or palette.purple },                  -- Pink in light mode, purple in dark mode for pointers
+    FzfLuaFzfSeparator  = { fg = palette.yellow, bg = palette.bg },                              -- Yellow separator with the background color
+    FzfLuaHeaderBind    = "@punctuation.special",                                                -- Special punctuation highlight for header binds
+    FzfLuaHeaderText    = "Title",                                                               -- Uses Title styling for header text
+    FzfLuaNormal        = { fg = palette.fg, bg = palette.bg },                                  -- Normal text with background color
+    FzfLuaPath          = "Directory",                                                           -- Directory highlight for paths
+    FzfLuaPreviewTitle  = { fg = is_light and palette.teal or palette.purple, bg = palette.bg }, -- Teal in light mode, purple in dark mode for preview titles
+    FzfLuaTitle         = { fg = palette.teal, bg = palette.bg },                                -- Teal title with background color
   }
 
   return fzf_hl

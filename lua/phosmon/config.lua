@@ -6,7 +6,7 @@ local M = {
     custom_colors = nil,
     enable = {
       ministarter = true,
-      fzf_lua = false
+      fzf_lua = true
     },
   }
 }
