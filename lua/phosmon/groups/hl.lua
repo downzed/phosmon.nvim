@@ -1,9 +1,10 @@
 local M = {}
 
 M.get_hlgroups = function()
-  local options = require('phosmon.config').get_options()
-  local palette = require('phosmon.colors').get_palette()
-  local is_light = options.mode == 'light'
+  local options = require("phosmon.config").get_options()
+  local palette = require("phosmon.colors").get_palette()
+  local is_light = options.mode == "light"
+  local is_transparent = options.transparent
 
   local highlights = {
     Normal = { bg = palette.bg, fg = palette.fg },
@@ -18,19 +19,19 @@ M.get_hlgroups = function()
     Operator = { bg = false, fg = palette.fg },
     PreProc = { bg = palette.bg, fg = palette.light_gray },
     Type = { bg = false, fg = palette.teal, bold = true },
-    Special = { bg = false, fg = is_light and palette.mid_gray or palette.light_gray, italic = true },
+    Special = { bg = false, fg = is_light and palette.mid_gray or palette.light_gray },
     Error = { bg = false, fg = palette.red, bold = true },
     Warning = { bg = false, fg = palette.yellow },
     ModeMsg = { bg = false, fg = palette.light_gray },
     Todo = { bg = palette.bg, fg = palette.pink, bold = true },
     Underlined = { bg = false, fg = palette.fg, underline = true },
-    StatusLine = { bg = palette.statusline_bg, fg = palette.statusline_fg },
+    StatusLine = { bg = is_transparent and "NONE" or palette.statusline_bg, fg = palette.statusline_fg },
     StatusLineNC = { bg = palette.cursorline_bg, fg = palette.light_gray },
     WildMenu = { bg = palette.cursorline_bg, fg = palette.red },
     VertSplit = { bg = palette.cursorline_bg, fg = palette.dark_gray },
     Title = { bg = false, fg = palette.fg, bold = true },
     LineNr = { bg = false, fg = palette.dark_gray },
-    CursorLineNr = { bg = palette.cursorline_bg, fg = palette.purple },
+    CursorLineNr = { bg = "NONE", fg = palette.teal },
     Cursor = { bg = palette.purple, fg = palette.fg },
     CursorLine = { bg = palette.cursorline_bg, fg = false },
     ColorColumn = { bg = palette.cursorline_bg, fg = false },

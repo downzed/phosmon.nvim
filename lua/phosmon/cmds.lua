@@ -10,8 +10,10 @@ M.set_commands = function()
     if #args == 2 and args[1] == "toggle" then
       if args[2] == "opacity" then
         theme.toggle_opacity()
-      elseif args[2] == "dark_mode" then
-        theme.toggle_dark_mode()
+      end
+    elseif #args == 2 and args[1] == "select" then
+      if args[2] == "mode" then
+        theme.select_mode()
       end
     else
       vim.notify("phosmon.nvim: invalid phosmon command")
@@ -24,12 +26,11 @@ M.set_commands = function()
       local complete_args = {}
 
       if #cmd_parts == 2 then
-        complete_args = { "toggle" }
+        complete_args = { "toggle", "select" }
       elseif #cmd_parts == 3 and cmd_parts[2] == "toggle" then
-        complete_args = {
-          "opacity",
-          "dark_mode",
-        }
+        complete_args = { "opacity" }
+      elseif #cmd_parts == 3 and cmd_parts[2] == "select" then
+        complete_args = { "mode" }
       end
 
       return complete_args

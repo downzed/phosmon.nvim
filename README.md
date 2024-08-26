@@ -4,50 +4,47 @@
 `phosmon.nvim` is a minimal, monotone (as possible) colorscheme designed for Neovim, trying to preserve the aesthetics of the original `photon.vim` theme while using the benefits of Lua.
 
 ### Installation
-##### Using lazy.nvim:
-
-If you want to use it as a plugin: 
+Using lazy.nvim:
 ```
 {
     "downzed/phosmon.nvim",
-    -- leave empty for default options and default colorscheme set up
-    opts = {},
-
-    -- or
-    config = function(_, opts)
-      require("phosmon").setup(opts)
-      vim.cmd("colorscheme phosmon")
-    end
+    opts = {
+        -- leave empty for default options
+        mode = "dark", -- "dark" | "light" | "photon",
+        transparent = false,
+        enable = {
+            ministarter = true,
+            fzf_lua = true
+        }
+    },
 }
+```
+
+### Usage
+```
+vim.cmd("colorscheme phosmon")
+
+-- or
+colorscheme phosmon
 ```
 
 
 #### Default options
 | Option | Default | Description |
 | --- | --- | --- |
-| `mode` | `dark` | `light` or `dark` |
+| `mode` | `dark` | Select between `light`, `dark`, `photon` |
 | `transparent` | `false` | Enable transparent background |
 | `enable.ministarter` | `true` | Enable mini-starter |
 | `enable.fzf_lua` | `true` | Enable fzf-lua |
 
-```
-    {
-        mode = "dark" | "light",
-        transparent = false,
-        enable = {
-            ministarter = true,
-            fzf_lua = true
-        }
-    }
-```
-### Utils
+### Features
 `phosmon` will load some utils:
 - [x] `Phosmon toggle opacity`
-- [x] `Phosmon toggle dark_mode`
+- [x] `Phosmon select mode`
 
 
 ### Integrations
-- [ ] light theme (in progress)
+- [ ] light theme (available, but in progress)
 - [x] lualine
 - [x] tree-sitter (might be off)
 - [x] fzf-lua (might be off)

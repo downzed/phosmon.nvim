@@ -13,7 +13,7 @@ M.colorscheme = function()
   end
   local mode = require("phosmon.config").get_current_mode()
 
-  vim.o.background = mode
+  vim.o.background = mode == "photon" and "dark" or mode
   vim.o.termguicolors = true
   vim.g.colors_name = "phosmon"
 
@@ -24,27 +24,29 @@ M.colorscheme = function()
   end
 end
 
-M.toggle_dark_mode = function()
-  local mode = config.get_current_mode()
-  local m = mode
+--- @description Select phosmon mode from a list
+--- sets the current background & mode and reloads the highlights
+M.select_mode = function()
+  local modes = { "dark", "light", "photon" }
+  local current_mode = config.get_current_mode()
 
-  if mode == "dark" then
-    m = "light"
-  else
-    m = "dark"
-  end
-
-
-  require("phosmon.config").set_mode(m)
-  vim.o.background = m
-  require("phosmon.highlight").set_hlgroups()
+  vim.ui.select(modes, {
+    prompt = "Phosmon mode",
+    format_item = function(item)
+      return (item == current_mode and item .. " (current)" or item)
+    end
+  }, function(choice)
+    if choice then
+      require("phosmon.config").set_mode(choice)
+      vim.o.background = choice == "photon" and "dark" or choice
+      require("phosmon.highlight").set_hlgroups()
+    end
+  end)
 end
 
---- @name phosmon toggle opacity
 M.toggle_opacity = function()
   if require("phosmon.config").get_current_mode() == "light" then
-    vim.notify_once("phosmon.nvim: can't toggle opacity in light mode")
-    return
+    vim.notify_once("phosmon.nvim: make sure your terminal supports transparency and set with a light theme")
   end
 
   local default_bg = require("phosmon.colors").get_palette().bg
