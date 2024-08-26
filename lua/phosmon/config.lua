@@ -16,12 +16,12 @@ M.setup = function(user_config)
 end
 
 ---@description Set phosmon mode
----@param mode "dark" | "light"
+---@param mode "dark" | "light" | "photon"
 M.set_mode = function(mode)
   M.options.mode = mode
 end
 ---@description Get current phosmon mode
----@return "dark" | "light"
+---@return "dark" | "light" | "photon"
 M.get_current_mode = function()
   return M.options.mode
 end

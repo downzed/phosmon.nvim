@@ -6,7 +6,6 @@ local plugins = {}
 plugins.load_lualine = function()
   local p = require("phosmon.colors").get_palette()
   local c = require("phosmon.config")
-  local m = c.get_current_mode()
   local is_transparent = c.get_options().transparent
 
   local phosmon = {
@@ -51,6 +50,9 @@ plugins.load_lualine = function()
       },
     }
   }
+
+  local mode = c.get_current_mode()
+  local m = mode == "photon" and "dark" or mode
 
   phosmon[m].visual = phosmon[m].insert
   phosmon[m].replace = phosmon[m].insert

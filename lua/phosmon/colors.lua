@@ -1,6 +1,29 @@
 local M = {}
 
 local palettes = {
+  photon = {
+    fg = "#c6c6c6",
+    bg = "#262626",
+    dark_gray = "#3a3a3a",
+    light_gray = "#8a8a8a",
+    purple = "#af87d7",
+    teal = "#87a8a8",
+    red = "#d75f5f",
+    yellow = "#d7af5f",
+    pink = "#d75f87",
+    statusline_bg = "#2e2e2e",
+    statusline_fg = "#af87d7",
+    cursorline_bg = "#2e2e2e",
+    visual_bg = "#444444",
+    search_fg = "#f2f2f2",
+    incsearch_bg = "#d75f5f",
+    search_bg = "#af87d7",
+    sign_fg = "#767676",
+    diff_add_fg = "#87af87",
+    diff_change_fg = "#303030",
+    diff_delete_fg = "#d75f87",
+    diff_text_fg = "#d7af5f",
+  },
   dark = {
     fg = "#d0d0d0",             -- Slightly brighter muted white for text (more contrast)
     bg = "#1c1c1c",             -- Slightly softened black-gray background

@@ -5,8 +5,6 @@
 
 ### Installation
 ##### Using lazy.nvim:
-
-If you want to use it as a plugin: 
 ```
 {
     "downzed/phosmon.nvim",
@@ -25,14 +23,14 @@ If you want to use it as a plugin:
 #### Default options
 | Option | Default | Description |
 | --- | --- | --- |
-| `mode` | `dark` | `light` or `dark` |
+| `mode` | `dark` | Select between `light`, `dark`, `photon` |
 | `transparent` | `false` | Enable transparent background |
 | `enable.ministarter` | `true` | Enable mini-starter |
 | `enable.fzf_lua` | `true` | Enable fzf-lua |
 
 ```
     {
-        mode = "dark" | "light",
+        mode = "dark" | "light" | "photon",
         transparent = false,
         enable = {
             ministarter = true,
@@ -43,7 +41,7 @@ If you want to use it as a plugin:
 ### Utils
 `phosmon` will load some utils:
 - [x] `Phosmon toggle opacity`
-- [x] `Phosmon toggle dark_mode`
+- [x] `Phosmon select mode`
 
 
 ### Integrations

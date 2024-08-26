@@ -13,7 +13,7 @@ M.colorscheme = function()
   end
   local mode = require("phosmon.config").get_current_mode()
 
-  vim.o.background = mode
+  vim.o.background = mode == "photon" and "dark" or mode
   vim.o.termguicolors = true
   vim.g.colors_name = "phosmon"
 
@@ -22,6 +22,23 @@ M.colorscheme = function()
   if config.options.transparent then
     M.toggle_opacity()
   end
+end
+
+M.select_mode = function()
+  local modes = { "dark", "light", "photon" }
+  local current_mode = config.get_current_mode()
+  vim.ui.select(modes, {
+    prompt = "Phosmon mode",
+    format_item = function(item)
+      return (item == current_mode and item .. " (current)" or item)
+    end
+  }, function(choice)
+    if choice then
+      require("phosmon.config").set_mode(choice)
+      vim.o.background = choice == "photon" and "dark" or choice
+      require("phosmon.highlight").set_hlgroups()
+    end
+  end)
 end
 
 M.toggle_dark_mode = function()
@@ -33,7 +50,6 @@ M.toggle_dark_mode = function()
   else
     m = "dark"
   end
-
 
   require("phosmon.config").set_mode(m)
   vim.o.background = m

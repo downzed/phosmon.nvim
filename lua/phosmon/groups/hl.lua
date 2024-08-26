@@ -1,9 +1,9 @@
 local M = {}
 
 M.get_hlgroups = function()
-  local options = require('phosmon.config').get_options()
-  local palette = require('phosmon.colors').get_palette()
-  local is_light = options.mode == 'light'
+  local options = require("phosmon.config").get_options()
+  local palette = require("phosmon.colors").get_palette()
+  local is_light = options.mode == "light"
   local is_transparent = options.transparent
 
   local highlights = {
