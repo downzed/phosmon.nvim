@@ -9,32 +9,48 @@
 If you want to use it as a plugin: 
 ```
 {
-    'downzed/phosmon.nvim',
+    "downzed/phosmon.nvim",
     -- leave empty for default options and default colorscheme set up
-    opts = {
-        -- default options
-        mode = "dark", -- or "light"
+    opts = {},
+
+    -- or
+    config = function(_, opts)
+      require("phosmon").setup(opts)
+      vim.cmd("colorscheme phosmon")
+    end
+}
+```
+
+
+#### Default options
+| Option | Default | Description |
+| --- | --- | --- |
+| `mode` | `dark` | `light` or `dark` |
+| `transparent` | `false` | Enable transparent background |
+| `enable.ministarter` | `true` | Enable mini-starter |
+| `enable.fzf_lua` | `true` | Enable fzf-lua |
+
+```
+    {
+        mode = "dark" | "light",
         transparent = false,
         enable = {
             ministarter = true,
+            fzf_lua = true
         }
     }
-}
 ```
-Which will set `phosmon` as the default colorscheme and will load some perks:<br />
+### Utils
+`phosmon` will load some utils:
 - [x] `Phosmon toggle opacity`
-- [ ] `Phosmon toggle dark_mode`
+- [x] `Phosmon toggle dark_mode`
 
-If you want to do it yourself:
-```
-{ 'downzed/phosmon.nvim' }
-```
-Then somewhere in your code `vim.cmd('colorscheme phosmon')`.
 
 ### Integrations
-- [ ] light theme
+- [ ] light theme (in progress)
 - [x] lualine
 - [x] tree-sitter (might be off)
+- [x] fzf-lua (might be off)
 - [x] mini.starter
 - [ ] more to come
 - [ ] suggestions?

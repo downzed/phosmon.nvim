@@ -3,7 +3,7 @@ local M = {}
 local palettes = {
   dark = {
     fg = "#c6c6c6",
-    bg = "#2a2a2a",
+    bg = "#262626",
     dark_gray = "#3a3a3a",
     light_gray = "#8a8a8a",
     purple = "#af87d7",
@@ -53,7 +53,7 @@ local palettes = {
 
 M.get_palette = function()
   local config = require("phosmon.config")
-  local palette = palettes[config.get_options().mode]
+  local palette = palettes[config.get_current_mode()]
   -- if options.custom_colors then
   --   return vim.tbl_deep_extend("force", palette, options.custom_colors)
   -- end

@@ -15,11 +15,19 @@ M.setup = function(user_config)
   M.options = vim.tbl_deep_extend('force', M.defaults, user_config or {})
 end
 
--- Function to get the current mode (dark or light)
+---@description Set phosmon mode
+---@param mode "dark" | "light"
+M.set_mode = function(mode)
+  M.options.mode = mode
+end
+---@description Get current phosmon mode
+---@return "dark" | "light"
 M.get_current_mode = function()
   return M.options.mode
 end
 
+---@description Get phosmon options
+---@return table
 M.get_options = function()
   return M.options
 end

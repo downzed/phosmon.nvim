@@ -3,13 +3,14 @@ local M = {}
 M.get_hlgroups = function()
   local options = require('phosmon.config').get_options()
   local palette = require('phosmon.colors').get_palette()
+  local is_light = options.mode == 'light'
 
   local highlights = {
     Normal = { bg = palette.bg, fg = palette.fg },
     NonText = { bg = false, fg = palette.dark_gray },
     EndOfBuffer = { bg = false, fg = palette.bg },
     FloatBorder = { bg = false, fg = palette.bg },
-    Comment = { fg = options.mode == 'light' and palette.mid_gray or palette.light_gray, italic = true },
+    Comment = { fg = is_light and palette.mid_gray or palette.light_gray, italic = true },
     Conceal = { bg = palette.bg, fg = palette.mid_gray },
     Constant = { bg = false, fg = palette.purple },
     Identifier = { bg = false, fg = palette.fg },
@@ -17,7 +18,7 @@ M.get_hlgroups = function()
     Operator = { bg = false, fg = palette.fg },
     PreProc = { bg = palette.bg, fg = palette.light_gray },
     Type = { bg = false, fg = palette.teal, bold = true },
-    Special = { bg = false, fg = palette.light_gray, italic = true },
+    Special = { bg = false, fg = is_light and palette.mid_gray or palette.light_gray, italic = true },
     Error = { bg = false, fg = palette.red, bold = true },
     Warning = { bg = false, fg = palette.yellow },
     ModeMsg = { bg = false, fg = palette.light_gray },
@@ -41,7 +42,7 @@ M.get_hlgroups = function()
     PmenuSel = { bg = palette.cursorline_bg, fg = palette.purple },
     PmenuThumb = { bg = palette.red, fg = false },
     FoldColumn = { bg = false, fg = palette.light_gray },
-    Folded = { bg = palette.visual_bg, fg = palette.light_gray },
+    Folded = { bg = palette.visual_bg, fg = is_light and palette.dark_gray or palette.light_gray },
     SpecialKey = { bg = false, fg = palette.light_gray },
     IncSearch = { bg = palette.red, fg = palette.bg },
     Search = { bg = palette.purple, fg = palette.bg },

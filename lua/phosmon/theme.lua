@@ -34,15 +34,15 @@ M.toggle_dark_mode = function()
     m = "dark"
   end
 
-  require("phosmon.config").options.mode = m
+
+  require("phosmon.config").set_mode(m)
   vim.o.background = m
   require("phosmon.highlight").set_hlgroups()
 end
 
 --- @name phosmon toggle opacity
---- @usage `require('phosmon').toggle_opacity()`
 M.toggle_opacity = function()
-  if require("phosmon.config").mode == "light" then
+  if require("phosmon.config").get_current_mode() == "light" then
     vim.notify_once("phosmon.nvim: can't toggle opacity in light mode")
     return
   end

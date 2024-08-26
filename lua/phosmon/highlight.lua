@@ -24,6 +24,8 @@ M.set_hlgroups = function()
 
   local hl_groups = vim.tbl_extend("force", base_groups, l.get_base_links())
 
+  hl_groups = vim.tbl_extend("force", hl_groups, l.get_treesitter())
+
   local opts = require("phosmon.config").get_options()
 
   if opts.enable.fzf_lua then
