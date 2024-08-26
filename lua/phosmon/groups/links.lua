@@ -180,8 +180,7 @@ local ministarter_hl = {
 }
 
 local fzf_lua_highlights = function()
-  local config = require('config')
-  local palette = config.palette
+  local palette = require('phosmon.colors').get_palette()
 
   local fzf_hl = {
     FzfLuaNormal = { bg = palette.normal_bg, fg = palette.normal_fg },

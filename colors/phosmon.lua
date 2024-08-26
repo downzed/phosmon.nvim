@@ -1,1 +1,1 @@
-require('phosmon').setup()
+require('phosmon').load()
