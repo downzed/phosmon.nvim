@@ -53,6 +53,15 @@ colorscheme phosmon
 - [ ] suggestions?
 
 
+### Screenshots
+| dark                            | light                           | photon  |
+| ----------------------------------- | ----------------------------------- |----------------------------------- |
+| [![dark](./screenshots/dark.png)](./screenshots/dark.png) | [![light](./screenshots/light.png)](./screenshots/light.png) | [![photon](./screenshots/photon.png)](./screenshots/photon.png) |
+| transparent dark                            |                            | transparent photon  |
+| [![transparent dark](./screenshots/dark-trans.png)](./screenshots/dark-trans.png) |  | [![transparent photon](./screenshots/photon-trans.png)](./screenshots/photon-trans.png) |
+
+
+
 ### Contributing
 Contributions are welcome! Feel free to submit issues or pull requests to enhance this port.
 I probably missed something, and I'm color-blind, so be gentle.
