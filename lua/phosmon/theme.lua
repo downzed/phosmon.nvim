@@ -22,6 +22,10 @@ M.colorscheme = function()
   if config.options.transparent then
     M.toggle_opacity()
   end
+
+  if config.options.extra.olsp then
+    require("phosmon.extra.olsp").set_keys()
+  end
 end
 
 --- @description Select phosmon mode from a list

@@ -5,6 +5,9 @@ M.defaults = {
   transparent = false,
   mode = "dark",
   custom_colors = nil,
+  extra = {
+    olsp = true
+  },
   enable = {
     ministarter = true,
     fzf_lua = true
