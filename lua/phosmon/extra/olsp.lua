@@ -1,95 +1,78 @@
+local utils = require("phosmon.extra.utils")
+local buffer = require("phosmon.extra.buffer")
+
 local M = {}
 
-local encode_to_json = function(data)
-  local json = vim.fn.json_encode(data)
-  return vim.fn.shellescape(json)
+local handle_on_stderr = function(_, res)
+  if res ~= nil and table.concat(res, "\n") ~= "" then
+    vim.notify(
+      "[phosmon.nvim] Error: " .. table.concat(res, "\n"),
+      vim.log.levels.ERROR
+    )
+  end
 end
 
-local decode_from_json = function(data)
-  if type(data) ~= "string" or data == "" then
-    return nil
+local handle_on_stdout = function(_, data, event)
+  if event == "stderr" or not data then
+    handle_on_stderr(_, data)
   end
 
-  local ok, decoded = pcall(vim.fn.json_decode, data)
-  if not ok then
-    vim.notify("Error decoding JSON: " .. decoded, vim.log.levels.ERROR)
-    return nil
+  local decoded = utils.decode_from_json(data[1])
+  if decoded == nil then
+    return
   end
 
-  return decoded
+  if decoded.message and decoded.message.content then
+    buffer.open_tooltip(decoded.message.content)
+  end
 end
 
-local function get_symbol_info(callback)
-  local params = vim.lsp.util.make_position_params()
-
-  vim.lsp.buf_request(0, 'textDocument/hover', params, function(_, result, _, _)
-    if result and result.contents then
-      local symbol_info = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
-      callback(symbol_info[2] or symbol_info[1])
-    else
-      callback(nil)
-    end
-  end)
+local handle_on_exit = function(_, code)
+  if code ~= 0 then
+    vim.notify("[phosmon.nvim]: Ollama query failed with exit code " .. code, vim.log.levels.ERROR)
+    return
+  end
 end
 
-local handle_the_job = function(cmd, callback)
+local handle_the_job = function(cmd)
   local job = vim.fn.jobstart(cmd, {
     stdout_buffered = true,
     stderr_buffered = true,
-    on_stdout = function(_, data, event)
-      if event == "stderr" or not data then
-        return
-      end
-
-      local decoded = decode_from_json(data[1])
-      if decoded == nil then
-        return
-      end
-      if decoded.message and decoded.message.content then
-        local content = decoded.message.content
-        print(vim.inspect(content))
-        callback(content)
-        return
-      end
-    end,
-    on_stderr = function(_, res)
-      if res then
-        -- vim.notify("Error: " .. table.concat(res, "\n"), vim.log.levels.ERROR)
-        -- print("Error: " .. table.concat(res, "\n"))
-      end
-    end,
-    on_exit = function(_, code)
-      if code ~= 0 then
-        vim.notify("Ollama query failed with exit code " .. code, vim.log.levels.ERROR)
-      end
-    end
+    on_stdout = handle_on_stdout,
+    on_stderr = handle_on_stderr,
+    on_exit = handle_on_exit
   })
+
+  if job ~= nil or job ~= 0 then
+    vim.notify("[phosmon.nvim]: Ollsp running", vim.log.levels.SUCCESS)
+  else
+    vim.notify("[phosmon.nvim]: Ollama query failed", vim.log.levels.WARN)
+  end
 end
 
-local function query_ollama(term, callback)
+local query_ollama = function(term)
   local filetype = vim.bo.filetype
-  local messages = {}
 
-  get_symbol_info(function(lsp_symbol)
-    table.insert(messages, {
-      role = "system",
-      content =
-          "You're an LSP expert, you are to enhance the LSP result with given context: " ..
-          lsp_symbol ..
-          ", and filetype: " ..
-          filetype .. "." ..
-          "You will write short LSP-like description no more than 2 sentences. Give a explanation in markdown format"
+  utils.get_symbol_info(function(lsp_symbol)
+    local messages = {
+      {
+        role = "system",
+        content =
+            "You're an LSP expert. you answer only in less than 2 concise sentences. you are to enhance LSP experience, " ..
+            "regarding a specific filetype: " .. filetype .. "."
+      },
+      {
+        role = "user",
+        content = "Give me a concise LSP-like exaplantion of lsp definition: " .. lsp_symbol ..
+            " and " .. term
+      },
+    }
 
-    })
-
-    local msg = "Give a concise LSP-like explanation with a minimal example of " .. term
-
-    table.insert(messages, { role = "user", content = msg })
-
-    local json_body = encode_to_json({
+    local json_body = utils.encode_to_json({
       model    = "llama3.1:latest",
       stream   = false,
-      messages = messages
+      messages = messages,
+      format   = "markdown"
     })
 
     local port = "11434"
@@ -99,32 +82,16 @@ local function query_ollama(term, callback)
       json_body
     )
 
-    handle_the_job(cmd, callback)
+    handle_the_job(cmd)
   end)
 end
 
-local handle_response = function(_response)
-  print("TODO: handling response")
-  --[[ TODO: implement
-  if response then
-    vim.api.nvim_buf_set_lines(0, -1, -1, false, response)
-  else
-    -- TODO: implement
-  end
-  ]] --
-end
-
-
 M.set_keys = function()
-  vim.keymap.set('n', '<leader>q',
+  vim.keymap.set('n', '<leader>K',
     function()
-      query_ollama(vim.fn.expand('<cword>'),
-        handle_response
-      )
+      query_ollama(vim.fn.expand('<cword>'))
     end,
     { noremap = true, silent = true, desc = "Query Ollama" })
 end
-
-
 
 return M
