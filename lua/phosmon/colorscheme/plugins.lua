@@ -4,7 +4,7 @@ local plugins = {}
 --- @description load colorscheme based on current mode
 --- @return table
 plugins.load_lualine = function()
-  local p = require("phosmon.colors").get_palette()
+  local p = require("phosmon.colorscheme.colors").get_palette()
   local c = require("phosmon.config")
   local is_transparent = c.get_options().transparent
 

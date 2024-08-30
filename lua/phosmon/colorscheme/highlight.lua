@@ -19,8 +19,8 @@ M.apply_highlights = function(groups)
 end
 
 M.set_hlgroups = function()
-  local base_groups = require("phosmon.groups.hl").get_hlgroups()
-  local l = require("phosmon.groups.links")
+  local base_groups = require("phosmon.colorscheme.groups.hl").get_hlgroups()
+  local l = require("phosmon.colorscheme.groups.links")
 
   local hl_groups = vim.tbl_extend("force", base_groups, l.get_base_links())
 

@@ -83,7 +83,8 @@ local auto_close = function(win, buf)
 end
 
 B.open_tooltip = function(content)
-  local title = "Phosmon.ai - I might be wrong"
+  local model_name = require("phosmon.config").get_ai_model()
+  local title = "Model: `" .. model_name .. "`  󰢚  [phosmon.ai]"
   local buf = create_buffer(content, title)
   local opts = get_window_opts()
 

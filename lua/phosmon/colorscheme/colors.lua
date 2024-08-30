@@ -77,9 +77,6 @@ local palettes = {
 M.get_palette = function()
   local config = require("phosmon.config")
   local palette = palettes[config.get_current_mode()]
-  -- if options.custom_colors then
-  --   return vim.tbl_deep_extend("force", palette, options.custom_colors)
-  -- end
   return palette
 end
 

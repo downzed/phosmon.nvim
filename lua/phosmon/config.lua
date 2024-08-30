@@ -5,8 +5,10 @@ M.defaults = {
   transparent = false,
   mode = "dark",
   custom_colors = nil,
-  extra = {
-    olsp = true
+  ai = {
+    enable = true,
+    model = "llama3.1:latest",
+    port = "11434"
   },
   enable = {
     ministarter = true,
@@ -43,6 +45,23 @@ end
 M.get_current_mode = function()
   return validate_mode(M.options.mode)
 end
+
+M.get_ai_options = function()
+  return M.options.ai or M.defaults.ai
+end
+
+M.set_ai_model = function(model)
+  M.options.ai.model = model
+end
+
+M.get_ai_model = function()
+  return M.options.ai and M.options.ai.model or M.defaults.ai.model
+end
+
+M.set_ai_options = function(opts)
+  M.options.ai = vim.tbl_extend('force', M.options.ai, opts)
+end
+
 
 ---description: Get phosmon options
 M.get_options = function()

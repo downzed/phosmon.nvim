@@ -17,14 +17,10 @@ M.colorscheme = function()
   vim.o.termguicolors = true
   vim.g.colors_name = "phosmon"
 
-  require("phosmon.highlight").set_hlgroups()
+  require("phosmon.colorscheme.highlight").set_hlgroups()
 
   if config.options.transparent then
     M.toggle_opacity()
-  end
-
-  if config.options.extra.olsp then
-    require("phosmon.extra.olsp").set_keys()
   end
 end
 
@@ -43,7 +39,7 @@ M.select_mode = function()
     if choice then
       require("phosmon.config").set_mode(choice)
       vim.o.background = choice == "photon" and "dark" or choice
-      require("phosmon.highlight").set_hlgroups()
+      require("phosmon.colorscheme.highlight").set_hlgroups()
     end
   end)
 end
@@ -53,7 +49,7 @@ M.toggle_opacity = function()
     vim.notify_once("phosmon.nvim: make sure your terminal supports transparency and set with a light theme")
   end
 
-  local default_bg = require("phosmon.colors").get_palette().bg
+  local default_bg = require("phosmon.colorscheme.colors").get_palette().bg
 
   local hl_groups = {
     "Normal",
