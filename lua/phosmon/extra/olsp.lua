@@ -1,3 +1,4 @@
+local logger = require("phosmon.logger")
 local utils = require("phosmon.extra.utils")
 local buffer = require("phosmon.extra.buffer")
 
@@ -5,10 +6,7 @@ local M = {}
 
 local handle_on_stderr = function(_, res)
   if res ~= nil and table.concat(res, "\n") ~= "" then
-    vim.notify(
-      "[phosmon.nvim] Error: " .. table.concat(res, "\n"),
-      vim.log.levels.ERROR
-    )
+    logger.error(table.concat(res, "\n"))
   end
 end
 
@@ -29,13 +27,13 @@ end
 
 local handle_on_exit = function(_, code)
   if code ~= 0 then
-    vim.notify("[phosmon.nvim]: Ollama query failed with exit code " .. code, vim.log.levels.ERROR)
+    logger.error("Query failed with exit code " .. code)
     return
   end
 end
 
-local handle_the_job = function(cmd)
-  local job = vim.fn.jobstart(cmd, {
+local handle_the_job = function(cmd, term)
+  local job_id = vim.fn.jobstart(cmd, {
     stdout_buffered = true,
     stderr_buffered = true,
     on_stdout = handle_on_stdout,
@@ -43,14 +41,14 @@ local handle_the_job = function(cmd)
     on_exit = handle_on_exit
   })
 
-  if job ~= nil or job ~= 0 then
-    vim.notify("[phosmon.nvim]: Ollsp running", vim.log.levels.SUCCESS)
+  if job_id ~= nil or job_id ~= 0 then
+    logger.success("Searching for `" .. term .. "`")
   else
-    vim.notify("[phosmon.nvim]: Ollama query failed", vim.log.levels.WARN)
+    logger.error("Job failed")
   end
 end
 
-local query_ollama = function(term)
+local run_query = function(term)
   local filetype = vim.bo.filetype
 
   utils.get_symbol_info(function(lsp_symbol)
@@ -82,14 +80,14 @@ local query_ollama = function(term)
       json_body
     )
 
-    handle_the_job(cmd)
+    handle_the_job(cmd, term)
   end)
 end
 
 M.set_keys = function()
   vim.keymap.set('n', '<leader>K',
     function()
-      query_ollama(vim.fn.expand('<cword>'))
+      run_query(vim.fn.expand('<cword>'))
     end,
     { noremap = true, silent = true, desc = "Query Ollama" })
 end

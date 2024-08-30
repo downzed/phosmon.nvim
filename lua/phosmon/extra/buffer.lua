@@ -1,62 +1,78 @@
 local B = {}
 
-local create_buffer = function(content)
+local create_buffer = function(content, title)
   local buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_option(buf, 'buftype', 'nofile')
   vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
   vim.api.nvim_buf_set_option(buf, 'filetype', 'markdown')
 
-  -- Set the content of the buffer
-  local sentences = {}
-  for sentence in content:gmatch("([^.]+%.%s)") do
-    if sentence:match("%S") then
-      table.insert(sentences, sentence)
-    end
+  local words = {}
+  for word in content:gmatch("%S+") do
+    table.insert(words, word)
   end
 
-  -- Set the content of the buffer
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, sentences)
+  local max_words_per_line = 7
 
-  return buf, sentences
+  local lines = {}
+
+  for i = 1, #words, max_words_per_line do
+    table.insert(lines, table.concat(words, " ", i, math.min(i + max_words_per_line - 1, #words)))
+  end
+
+  table.insert(lines, 1, "")
+  table.insert(lines, 1, title)
+
+  B.lines = lines
+  B.buffer = buf
+
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+
+  return buf, lines
 end
 
-local get_window_opts = function(sentences)
-  local max_width = 80
-  local width = 0
-
-  for _, sentence in ipairs(sentences) do
-    width = math.max(width, #sentence)
+local calculate_dynamic_width = function(lines)
+  local max_width = 0
+  for _, line in ipairs(lines) do
+    max_width = math.max(max_width, vim.fn.strdisplaywidth(line))
   end
-  width = math.min(width, max_width) < max_width and max_width
+  return max_width
+end
 
-  local height = #sentences
+local get_window_opts = function()
+  local lines = B.lines
+  local cursor_pos = vim.api.nvim_win_get_cursor(0)
+  local cursor_row = cursor_pos[1] - 1 -- 0-indexed row
+  local cursor_col = cursor_pos[2]     -- 0-indexed column
+
+  local width = calculate_dynamic_width(lines)
+  local height = #lines
+
   local win_height = vim.api.nvim_get_option("lines")
   local win_width = vim.api.nvim_get_option("columns")
-  local row = math.floor((win_height - height) / 2)
-  local col = math.floor((win_width - width) / 2)
+  local row = cursor_row + 1
+  local col = cursor_col + 1
 
-  -- return floating window options
+  if row + height > win_height then
+    row = cursor_row - height
+  end
+  if col + width > win_width then
+    col = win_width - width
+  end
+
   return {
-    relative = "editor",
+    focusable = false,
+    noautocmd = true,
+    relative = "cursor",
     width = width,
     height = height,
-    row = row,
-    col = col,
+    row = 0, -- position just below the cursor
+    col = 0, -- position slightly to the right of the cursor
     style = "minimal",
-    border = "rounded"
+    border = "rounded",
   }
 end
 
 local auto_close = function(win, buf)
-  -- Set up autocommand to close the window when cursor moves
-  vim.api.nvim_command([[
-    augroup close_tooltip
-      autocmd! * <buffer>
-      autocmd CursorMoved,CursorMovedI,InsertEnter <buffer> lua vim.api.nvim_win_close(]] .. win .. [[, true)
-    augroup END
-  ]])
-
-  -- Set up keymapping to close the window with 'q'
   vim.api.nvim_buf_set_keymap(
     buf,
     'n',
@@ -67,13 +83,12 @@ local auto_close = function(win, buf)
 end
 
 B.open_tooltip = function(content)
-  local buf, sentences = create_buffer(content)
-  local opts = get_window_opts(sentences)
+  local title = "Phosmon.ai - I might be wrong"
+  local buf = create_buffer(content, title)
+  local opts = get_window_opts()
 
-  -- Create the floating window
   local win = vim.api.nvim_open_win(buf, true, opts)
 
-  -- Format the buffer content
   vim.api.nvim_command("normal! gg=G")
   auto_close(win, buf)
 end
