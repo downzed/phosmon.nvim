@@ -1,7 +1,7 @@
 local L = {}
 
 local base_links = function()
-  local palette = require('phosmon.colors').get_palette()
+  local palette = require('phosmon.colorscheme.colors').get_palette()
   return {
     Character = { link = "Constant" },
     Number = { link = "Constant" },
@@ -175,7 +175,7 @@ local treesitter_hl = function()
 end
 
 local ministarter_hl = function()
-  local palette = require('phosmon.colors').get_palette()
+  local palette = require('phosmon.colorscheme.colors').get_palette()
   local is_light = require('phosmon.config').get_current_mode() == 'light'
 
   return {
@@ -192,7 +192,7 @@ local ministarter_hl = function()
 end
 
 local fzf_lua_highlights = function()
-  local palette = require('phosmon.colors').get_palette()
+  local palette = require('phosmon.colorscheme.colors').get_palette()
   local is_light = require('phosmon.config').get_current_mode() == 'light'
 
   local fzf_hl = {
