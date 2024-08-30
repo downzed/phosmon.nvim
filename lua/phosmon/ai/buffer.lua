@@ -82,6 +82,28 @@ local auto_close = function(_win, buf)
   )
 end
 
+B.open_split = function(content)
+  local lines = {}
+  for line in (content .. '\n'):gmatch("(.-)\n") do
+    table.insert(lines, line)
+  end
+
+  vim.cmd("vsplit :enew")
+
+  local buf = vim.api.nvim_get_current_buf()
+
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  vim.api.nvim_win_set_option(0, 'wrap', true)          -- Enable line wrapping in the split window
+  vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe') -- Wipe the buffer when it's no longer displayed
+  vim.api.nvim_buf_set_option(buf, 'buftype', 'nofile')
+  vim.api.nvim_buf_set_option(buf, 'filetype', vim.bo.filetype or 'markdown')
+  -- set buffer name
+  vim.api.nvim_buf_set_name(buf, "[phosmon.ai]")
+
+  vim.api.nvim_win_set_width(0, 50)
+  vim.api.nvim_command("normal! gg=G")
+end
+
 B.open_tooltip = function(content)
   local model_name = require("phosmon.config").get_ai_model()
   local title = "Model: `" .. model_name .. "`  󰢚  [phosmon.ai]"
