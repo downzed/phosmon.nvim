@@ -65,4 +65,3 @@ colorscheme phosmon
 ### Contributing
 Contributions are welcome! Feel free to submit issues or pull requests to enhance this port.
 I probably missed something, and I'm color-blind, so be gentle.
-
