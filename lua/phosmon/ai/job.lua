@@ -1,9 +1,8 @@
 local logger = require("phosmon.logger")
-local utils = require("phosmon.ai.utils")
 
 local M = {}
 
-M.handle_on_stderr = function(_, res)
+local handle_on_stderr = function(_, res)
   if res ~= nil then
     if type(res) == "string" then
       logger.error(res)
@@ -12,21 +11,6 @@ M.handle_on_stderr = function(_, res)
     end
   end
 end
-
--- local handle_on_stdout = function(data, event, callback)
---   if event == "stderr" or not data then
---     handle_on_stderr(_, data)
---   end
---
---   local decoded = utils.decode_from_json(data)
---   if decoded == nil then
---     return
---   end
---
---   if decoded.message and decoded.message.content then
---     callback(decoded.message.content)
---   end
--- end
 
 local handle_on_exit = function(_, code, data)
   if code ~= 0 then
@@ -43,7 +27,7 @@ M.handle_the_job = function(cmd, msg, handle_stdout)
     stdout_buffered = true,
     stderr_buffered = true,
     on_stdout = handle_stdout,
-    on_stderr = M.handle_on_stderr,
+    on_stderr = handle_on_stderr,
     on_exit = handle_on_exit
   })
 

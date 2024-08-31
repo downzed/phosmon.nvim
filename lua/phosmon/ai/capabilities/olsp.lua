@@ -1,4 +1,3 @@
-local logger = require("phosmon.logger")
 local utils = require("phosmon.ai.utils")
 local buffer = require("phosmon.ai.buffer")
 local job = require("phosmon.ai.job")

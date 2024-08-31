@@ -40,24 +40,24 @@ end
 
 local get_window_opts = function()
   local lines = B.lines
-  local cursor_pos = vim.api.nvim_win_get_cursor(0)
-  local cursor_row = cursor_pos[1] - 1 -- 0-indexed row
-  local cursor_col = cursor_pos[2]     -- 0-indexed column
+  -- local cursor_pos = vim.api.nvim_win_get_cursor(0)
+  -- local cursor_row = cursor_pos[1] - 1 -- 0-indexed row
+  -- local cursor_col = cursor_pos[2]     -- 0-indexed column
 
   local width = calculate_dynamic_width(lines)
   local height = #lines
 
-  local win_height = vim.api.nvim_get_option("lines")
-  local win_width = vim.api.nvim_get_option("columns")
-  local row = cursor_row + 1
-  local col = cursor_col + 1
-
-  if row + height > win_height then
-    row = cursor_row - height
-  end
-  if col + width > win_width then
-    col = win_width - width
-  end
+  -- local win_height = vim.api.nvim_get_option("lines")
+  -- local win_width = vim.api.nvim_get_option("columns")
+  -- local row = cursor_row + 1
+  -- local col = cursor_col + 1
+  --
+  -- if row + height > win_height then
+  --   row = cursor_row - height
+  -- end
+  -- if col + width > win_width then
+  --   col = win_width - width
+  -- end
 
   return {
     focusable = false,
@@ -72,7 +72,7 @@ local get_window_opts = function()
   }
 end
 
-local auto_close = function(win, buf)
+local auto_close = function(_win, buf)
   vim.api.nvim_buf_set_keymap(
     buf,
     'n',

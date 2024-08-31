@@ -30,7 +30,7 @@ M.set_commands = function()
   end, {
     nargs = "*",
     desc = "phosmon colorscheme commands. Use 'toggle opacity' to toggle opacity.",
-    complete = function(arg_lead, cmd_line, cursor_pos)
+    complete = function(_arg_lead, cmd_line, _cursor_pos)
       local cmd_parts = vim.split(cmd_line, " ")
       local complete_args = {}
 

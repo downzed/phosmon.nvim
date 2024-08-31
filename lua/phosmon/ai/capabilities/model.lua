@@ -40,7 +40,7 @@ end
 
 local catch_stderr = function(event, data)
   if event == "stderr" then
-    job.handle_on_stderr(_, data)
+    job.handle_on_stderr("", data)
     return true
   end
 end
