@@ -11,3 +11,8 @@ repos:
     rev: v1.0.0
     hooks:
     -   id: luacheck
+        name: Luacheck
+        entry: luacheck run .
+        language: system
+        types: [lua]
+        files: \.lua$
