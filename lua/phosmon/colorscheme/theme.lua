@@ -71,7 +71,7 @@ M.toggle_opacity = function()
     end
   end
 
-  ok, lualine = pcall(require, "lualine")
+  local ok, lualine = pcall(require, "lualine")
   if ok then
     lualine.refresh()
   end
