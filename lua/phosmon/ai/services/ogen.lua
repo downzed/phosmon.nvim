@@ -5,7 +5,7 @@ local buffer = require("phosmon.ai.buffer")
 local M = {}
 
 local get_params_for_gen = function(term)
-  local system = require("phosmon.ai.capabilities.msg_templates").get_gen_system(vim.bo.filetype)
+  local system = require("phosmon.ai.services.msg_templates").get_gen_system(vim.bo.filetype)
 
   local messages = {}
 

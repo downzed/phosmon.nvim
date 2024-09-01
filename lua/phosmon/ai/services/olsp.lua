@@ -5,7 +5,7 @@ local job = require("phosmon.ai.job")
 local M = {}
 
 local get_params_for_lsp = function(term, lsp_symbol)
-  local system = require("phosmon.ai.capabilities.msg_templates").get_lsp_system()
+  local system = require("phosmon.ai.services.msg_templates").get_lsp_system()
   local messages = {}
 
   table.insert(messages, system)

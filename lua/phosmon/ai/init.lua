@@ -1,6 +1,6 @@
-local model = require("phosmon.ai.capabilities.model")
-local olsp = require("phosmon.ai.capabilities.olsp")
-local ogen = require("phosmon.ai.capabilities.ogen")
+local model = require("phosmon.ai.services.model")
+local olsp = require("phosmon.ai.services.olsp")
+local ogen = require("phosmon.ai.services.ogen")
 
 local M = {}
 
