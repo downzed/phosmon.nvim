@@ -11,8 +11,8 @@ local get_params_for_lsp = function(term, lsp_symbol)
   table.insert(messages, system)
   table.insert(messages, {
     role = "user",
-    content = "Give me a concise exaplantion of lsp definition: " .. lsp_symbol ..
-        " and " .. term
+    content = "Give me a concise exaplantion of the next symbol definition: " .. lsp_symbol ..
+        " and " .. term .. "in " .. vim.bo.filetype
   })
 
   return {
@@ -20,7 +20,6 @@ local get_params_for_lsp = function(term, lsp_symbol)
     format   = "markdown"
   }
 end
-
 
 local handle_stdout = function(_, data, event)
   if event == "stderr" or not data then

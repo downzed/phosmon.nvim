@@ -3,21 +3,28 @@ local job = require("phosmon.ai.job")
 local buffer = require("phosmon.ai.buffer")
 
 local M = {}
+local gen_types = {
+  docstring = "Docstring",
+  testsuite = "Test Suite"
+}
 
-local get_params_for_gen = function(term)
-  local system = require("phosmon.ai.services.msg_templates").get_gen_system(vim.bo.filetype)
+local get_params_for_gen = function(content_type, term)
+  local system = require("phosmon.ai.services.msg_templates").get_docstring_system()
+  if content_type == gen_types.testsuite then
+    system = require("phosmon.ai.services.msg_templates").get_testsuite_system()
+  end
 
   local messages = {}
 
   table.insert(messages, system)
   table.insert(messages, {
     role = "user",
-    content = "Give me a docstring for this code: " .. term
+    content = "Create a " .. content_type .. " for this code: " .. term
   })
 
   return {
     messages = messages,
-    format   = vim.bo.filetype
+    format   = "markdown"
   }
 end
 
@@ -38,27 +45,30 @@ local handle_stdout = function(_, data, event)
   end
 end
 
-M.run = function()
-  local _, term = utils.get_visual_selection()
+---@param gen_type "docstring" | "testsuite"
+M.run = function(gen_type)
+  local _, term      = utils.get_visual_selection()
 
-  local ai_opts = require("phosmon.config").get_ai_options()
+  local ai_opts      = require("phosmon.config").get_ai_options()
 
-  local params  = get_params_for_gen(term)
+  local content_type = gen_types[gen_type]
 
-  local model   = require("phosmon.config").get_ai_model()
+  local params       = get_params_for_gen(content_type, term)
 
-  local data    = vim.tbl_extend("force", params, {
+  local model        = require("phosmon.config").get_ai_model()
+
+  local data         = vim.tbl_extend("force", params, {
     stream = false,
     model = model,
   })
 
-  local body    = utils.encode_to_json(data)
+  local body         = utils.encode_to_json(data)
 
-  local cmd     = string.format(
+  local cmd          = string.format(
     "curl --silent --no-buffer http://localhost:" .. ai_opts.port .. "/api/chat -d %s", body
   )
 
-  local msg     = "quering.."
+  local msg          = "Generating " .. content_type
 
   job.handle_the_job(cmd, msg, handle_stdout)
 end

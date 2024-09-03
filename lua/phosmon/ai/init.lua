@@ -12,10 +12,16 @@ M.setup = function()
     desc = require("phosmon.logger").notify_opts.title .. " run LSP",
   })
 
-  vim.keymap.set('v', '<leader>Pg', ogen.run, {
+  vim.keymap.set('v', '<leader>Pd', function() ogen.run("docstring") end, {
     noremap = true,
     silent = true,
-    desc = require("phosmon.logger").notify_opts.title .. " run Gen",
+    desc = require("phosmon.logger").notify_opts.title .. " [D]ocstring Gen",
+  })
+
+  vim.keymap.set('v', '<leader>Pt', function() ogen.run("testsuite") end, {
+    noremap = true,
+    silent = true,
+    desc = require("phosmon.logger").notify_opts.title .. " [T]estsuite Gen",
   })
 end
 

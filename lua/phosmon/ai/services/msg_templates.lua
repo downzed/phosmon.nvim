@@ -3,16 +3,25 @@ M.get_lsp_system = function()
   return {
     role = "system",
     content =
-        "You're an LSP expert. you answer in less than 2 concise sentences. you are to enhance LSP given input, " ..
+        "You're an LSP expert. you answer in less than 2 concise sentences. you are to enhance the given input, " ..
         "regarding a specific filetype: " .. vim.bo.filetype .. "."
   }
 end
 
-M.get_gen_system = function()
+M.get_docstring_system = function()
   return {
     role = "system",
     content =
         "You're a DocString expert. you answer in docstring template based on given code." ..
+        "You specifically regarding the filetype: " .. vim.bo.filetype .. "."
+  }
+end
+
+M.get_testsuite_system = function()
+  return {
+    role = "system",
+    content =
+        "You're a Testsuite expert. you answer in testsuite template based on given code." ..
         "You specifically regarding the filetype: " .. vim.bo.filetype .. "."
   }
 end
