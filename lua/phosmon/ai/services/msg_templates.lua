@@ -26,5 +26,13 @@ M.get_testsuite_system = function()
   }
 end
 
+M.get_tsinterface_system = function()
+  return {
+    role = "system",
+    content =
+        "You're a Typescript expert. you will create an interface or a type in Typescript template based on given code." ..
+        "You specifically regarding the filetype: " .. vim.bo.filetype .. "."
+  }
+end
 
 return M

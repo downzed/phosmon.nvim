@@ -23,6 +23,12 @@ M.setup = function()
     silent = true,
     desc = require("phosmon.logger").notify_opts.title .. " [T]estsuite Gen",
   })
+
+  vim.keymap.set('v', '<leader>Ps', function() ogen.run("tsinterface") end, {
+    noremap = true,
+    silent = true,
+    desc = require("phosmon.logger").notify_opts.title .. " Type[S]cript Interface Gen",
+  })
 end
 
 return M

@@ -5,13 +5,18 @@ local buffer = require("phosmon.ai.buffer")
 local M = {}
 local gen_types = {
   docstring = "Docstring",
-  testsuite = "Test Suite"
+  testsuite = "Test Suite",
+  tsinterface = "TypeScript Interface"
 }
 
 local get_params_for_gen = function(content_type, term)
   local system = require("phosmon.ai.services.msg_templates").get_docstring_system()
   if content_type == gen_types.testsuite then
     system = require("phosmon.ai.services.msg_templates").get_testsuite_system()
+  end
+
+  if content_type == gen_types.tsinterface then
+    system = require("phosmon.ai.services.msg_templates").get_tsinterface_system()
   end
 
   local messages = {}
@@ -45,7 +50,7 @@ local handle_stdout = function(_, data, event)
   end
 end
 
----@param gen_type "docstring" | "testsuite"
+--- @param gen_type "docstring" | "testsuite" | "tsinterface"
 M.run = function(gen_type)
   local _, term      = utils.get_visual_selection()
 
