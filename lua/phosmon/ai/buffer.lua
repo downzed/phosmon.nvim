@@ -40,24 +40,9 @@ end
 
 local get_window_opts = function()
   local lines = B.lines
-  -- local cursor_pos = vim.api.nvim_win_get_cursor(0)
-  -- local cursor_row = cursor_pos[1] - 1 -- 0-indexed row
-  -- local cursor_col = cursor_pos[2]     -- 0-indexed column
 
   local width = calculate_dynamic_width(lines)
   local height = #lines
-
-  -- local win_height = vim.api.nvim_get_option("lines")
-  -- local win_width = vim.api.nvim_get_option("columns")
-  -- local row = cursor_row + 1
-  -- local col = cursor_col + 1
-  --
-  -- if row + height > win_height then
-  --   row = cursor_row - height
-  -- end
-  -- if col + width > win_width then
-  --   col = win_width - width
-  -- end
 
   return {
     focusable = false,
@@ -72,7 +57,33 @@ local get_window_opts = function()
   }
 end
 
-local auto_close = function(_win, buf)
+-- Function to handle the input prompt and chat continuation
+-- local function chat_prompt(buf)
+--   vim.ui.input({ prompt = '󰢚 [phosmon.ai] Your message: ' }, function(input)
+--     if buf == nil or not buf then
+--       return
+--     end
+--
+--     if input and input ~= "" then
+--       -- Append the user's input to the buffer
+--       vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "### You: " .. input })
+--
+--       -- Call your chat function to process the input
+--       -- local response = process_chat_input(input)   -- You need to define this function to handle the chat logic
+--
+--       -- Display the response
+--       -- vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Bot: " .. response })
+--
+--       -- Keep the prompt active for more input
+--       chat_prompt()
+--     else
+--       -- Handle the case where the user cancels the input
+--       vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "󰢚 Chat ended." })
+--     end
+--   end)
+-- end
+
+local auto_close = function(_, buf)
   vim.api.nvim_buf_set_keymap(
     buf,
     'n',
@@ -80,6 +91,35 @@ local auto_close = function(_win, buf)
     ':close<CR>',
     { noremap = true, silent = true }
   )
+end
+
+B.open_split = function(content)
+  local lines = {}
+  for line in (content .. '\n'):gmatch("(.-)\n") do
+    table.insert(lines, line)
+  end
+
+  vim.cmd("vsplit :enew")
+
+  local buf = vim.api.nvim_get_current_buf()
+  local win = vim.api.nvim_get_current_win()
+
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  vim.api.nvim_win_set_option(0, 'wrap', true)          -- Enable line wrapping in the split window
+  vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe') -- Wipe the buffer when it's no longer displayed
+  vim.api.nvim_buf_set_option(buf, 'buftype', 'nofile')
+  vim.api.nvim_buf_set_option(buf, 'filetype', 'markdown')
+  -- set buffer name
+  vim.api.nvim_buf_set_name(buf, "[phosmon.ai]")
+
+  -- half width
+  vim.api.nvim_win_set_width(0, vim.o.columns / 2)
+  vim.api.nvim_command("normal! gg=G")
+
+  -- Focus the prompt window
+  vim.api.nvim_set_current_win(win)
+
+  -- chat_prompt(buf)
 end
 
 B.open_tooltip = function(content)

@@ -5,6 +5,9 @@ M.defaults = {
   transparent = false,
   mode = "dark",
   custom_colors = nil,
+  colorscheme = {
+    enable = true
+  },
   ai = {
     enable = true,
     model = "codegeex4",
@@ -44,6 +47,10 @@ end
 ---description: Get current phosmon mode
 M.get_current_mode = function()
   return validate_mode(M.options.mode)
+end
+
+M.get_is_colorscheme_enabled = function()
+  return M.options.colorscheme.enable or M.defaults.colorscheme.enable
 end
 
 M.get_ai_options = function()

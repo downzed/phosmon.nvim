@@ -24,8 +24,8 @@ end
 
 M.handle_the_job = function(cmd, msg, handle_stdout)
   local job_id = vim.fn.jobstart(cmd, {
-    stdout_buffered = true,
-    stderr_buffered = true,
+    -- stdout_buffered = true,
+    -- stderr_buffered = true,
     on_stdout = handle_stdout,
     on_stderr = handle_on_stderr,
     on_exit = handle_on_exit

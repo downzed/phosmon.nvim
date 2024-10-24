@@ -1,5 +1,5 @@
 local theme = require("phosmon.colorscheme.theme")
-local capabilities_model = require("phosmon.ai.capabilities.model")
+local services_model = require("phosmon.ai.services.model")
 local M = {}
 
 ---@description Set phosmon colorscheme commands
@@ -12,13 +12,13 @@ M.set_commands = function()
       if args[2] == "opacity" then
         theme.toggle_opacity()
       elseif args[2] == "ai" then
-        capabilities_model.toggle()
+        services_model.toggle()
       end
     elseif require("phosmon.config").get_ai_options().enable and #args == 2 and args[1] == "ai" then
       if args[2] == "select_model" then
-        capabilities_model.list()
+        services_model.list()
       elseif args[2] == "pull_model" then
-        capabilities_model.pull()
+        services_model.pull()
       end
     elseif #args == 2 and args[1] == "select" then
       if args[2] == "mode" then

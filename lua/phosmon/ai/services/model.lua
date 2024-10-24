@@ -8,7 +8,8 @@ local M = {}
 M.start = function()
   local ok = pcall(io.popen, "ollama serve > /dev/null 2>&1 &")
   if not ok then
-    return "Failed to start ollama"
+    logger.error("Failed to start ollama")
+    return
   end
 
   vim.defer_fn(function()

@@ -5,20 +5,15 @@ local job = require("phosmon.ai.job")
 local M = {}
 
 local get_params_for_lsp = function(term, lsp_symbol)
-  local filetype = vim.bo.filetype
-  local messages = {
-    {
-      role = "system",
-      content =
-          "You're an LSP expert. you answer only in less than 2 concise sentences. you are to enhance LSP experience, " ..
-          "regarding a specific filetype: " .. filetype .. "."
-    },
-    {
-      role = "user",
-      content = "Give me a concise LSP-like exaplantion of lsp definition: " .. lsp_symbol ..
-          " and " .. term
-    },
-  }
+  local system = require("phosmon.ai.services.msg_templates").get_lsp_system()
+  local messages = {}
+
+  table.insert(messages, system)
+  table.insert(messages, {
+    role = "user",
+    content = "Give me a concise exaplantion of the next symbol definition: " .. lsp_symbol ..
+        " and " .. term .. "in " .. vim.bo.filetype
+  })
 
   return {
     messages = messages,
@@ -31,17 +26,20 @@ local handle_stdout = function(_, data, event)
     job.handle_on_stderr(_, data)
   end
 
-  local decoded = utils.decode_from_json(data[1])
-  if decoded == nil then
+  local ok, decoded = pcall(utils.decode_from_json, data[1])
+
+  if not ok or (decoded and decoded.error) then
+    job.handle_on_stderr(_, (decoded and decoded.error))
     return
   end
 
-  if decoded.message and decoded.message.content then
+  if decoded and decoded.message and decoded.message.content then
     buffer.open_tooltip(decoded.message.content)
   end
 end
 
-M.run_lsp = function(term)
+M.run = function()
+  local term = vim.fn.expand('<cword>')
   local ai_opts = require("phosmon.config").get_ai_options()
 
   utils.get_symbol_info(function(lsp_symbol)
