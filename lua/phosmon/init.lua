@@ -1,11 +1,14 @@
 local config = require('phosmon.config')
-local theme = require('phosmon.colorscheme.theme')
 local cmds = require('phosmon.cmds')
 
 local phosmon = {}
 
-function phosmon.load()
+function phosmon.set_colors()
+  local theme = require('phosmon.colorscheme.theme')
   theme.colorscheme()
+end
+
+function phosmon.load()
   cmds.set_commands()
 
   if config.get_ai_options().enable then

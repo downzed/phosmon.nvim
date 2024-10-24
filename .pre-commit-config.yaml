@@ -12,7 +12,7 @@ repos:
     hooks:
     -   id: luacheck
         name: Luacheck
-        entry: luacheck run .
+        entry: luacheck .
         language: system
         types: [lua]
         files: \.lua$
