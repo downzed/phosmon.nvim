@@ -44,7 +44,7 @@ colorscheme phosmon
 
 
 ### Integrations
-- [ ] light theme (available, but in progress)
+- [x] light theme ~(available, but in progress)~
 - [x] lualine
 - [x] tree-sitter (might be off)
 - [x] fzf-lua (might be off)
