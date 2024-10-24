@@ -2,9 +2,9 @@ local theme = require("phosmon.colorscheme.theme")
 local services_model = require("phosmon.ai.services.model")
 local M = {}
 
----@description Set phosmon colorscheme commands
----@return nil
----@usage `Phosmon toggle opacity`
+--- @description Set phosmon colorscheme commands
+--- @return nil
+--- @usage `Phosmon toggle opacity`
 M.set_commands = function()
   vim.api.nvim_create_user_command('Phosmon', function(opts)
     local args = vim.split(opts.args, " ")
