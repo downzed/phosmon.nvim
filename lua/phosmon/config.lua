@@ -3,26 +3,26 @@ local M = {}
 ---@class Options
 M.defaults = {
   transparent = false,
-  mode = "dark",
+  mode = 'dark',
   custom_colors = nil,
   colorscheme = {
-    enable = true
+    enable = true,
   },
   ai = {
     enable = true,
-    model = "codegeex4",
-    port = "11434"
+    model = 'codegeex4',
+    port = '11434',
   },
   enable = {
     ministarter = true,
-    fzf_lua = true
+    fzf_lua = true,
   },
 }
 
 ---@type Options
 M.options = {}
 
-local modes = { "dark", "light", "photon" }
+local modes = { 'dark', 'light', 'photon' }
 
 ---description: Validate phosmon mode
 local function validate_mode(mode)
@@ -73,4 +73,4 @@ M.get_options = function()
   return M.options
 end
 
-return M;
+return M
