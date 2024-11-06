@@ -1,4 +1,7 @@
-local B = {}
+local B = {
+  buffer = nil,
+  win = nil,
+}
 
 local create_buffer = function(content, title)
   local buf = vim.api.nvim_create_buf(false, true)
@@ -93,10 +96,20 @@ B.open_split = function(content)
     table.insert(lines, line)
   end
 
+  if B.buffer ~= nil and B.win ~= nil then
+    if vim.api.nvim_win_is_valid(B.win) and vim.api.nvim_buf_is_valid(B.buffer) then
+      -- append lines to existing buffer
+      vim.api.nvim_buf_set_lines(B.buffer, -1, -1, false, lines)
+      vim.api.nvim_command('normal! gg=G')
+      return
+    end
+  end
   vim.cmd('vsplit :enew')
 
   local buf = vim.api.nvim_get_current_buf()
+  B.buffer = buf
   local win = vim.api.nvim_get_current_win()
+  B.win = win
 
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
   vim.api.nvim_win_set_option(0, 'wrap', true) -- Enable line wrapping in the split window
@@ -107,7 +120,7 @@ B.open_split = function(content)
   vim.api.nvim_buf_set_name(buf, '[phosmon.ai]')
 
   -- half width
-  vim.api.nvim_win_set_width(0, vim.o.columns / 2)
+  vim.api.nvim_win_set_width(win, math.floor(vim.api.nvim_win_get_width(win) / 2))
   vim.api.nvim_command('normal! gg=G')
 
   -- Focus the prompt window
