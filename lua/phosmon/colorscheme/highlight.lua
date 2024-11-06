@@ -6,8 +6,8 @@ local M = {}
 M.apply_highlights = function(groups)
   for hl, props in pairs(groups) do
     vim.api.nvim_set_hl(0, hl, {
-      bg = props.bg or "NONE",
-      fg = props.fg or "NONE",
+      bg = props.bg or 'NONE',
+      fg = props.fg or 'NONE',
       italic = props.italic == true,
       bold = props.bold == true,
       underline = props.underline == true,
@@ -19,21 +19,21 @@ M.apply_highlights = function(groups)
 end
 
 M.set_hlgroups = function()
-  local base_groups = require("phosmon.colorscheme.groups.hl").get_hlgroups()
-  local l = require("phosmon.colorscheme.groups.links")
+  local base_groups = require('phosmon.colorscheme.groups.hl').get_hlgroups()
+  local l = require('phosmon.colorscheme.groups.links')
 
-  local hl_groups = vim.tbl_extend("force", base_groups, l.get_base_links())
+  local hl_groups = vim.tbl_extend('force', base_groups, l.get_base_links())
 
-  hl_groups = vim.tbl_extend("force", hl_groups, l.get_treesitter())
+  hl_groups = vim.tbl_extend('force', hl_groups, l.get_treesitter())
 
-  local opts = require("phosmon.config").get_options()
+  local opts = require('phosmon.config').get_options()
 
   if opts.enable.fzf_lua then
-    hl_groups = vim.tbl_extend("force", hl_groups, l.get_fzf_lua())
+    hl_groups = vim.tbl_extend('force', hl_groups, l.get_fzf_lua())
   end
 
   if opts.enable.ministarter then
-    hl_groups = vim.tbl_extend("force", hl_groups, l.get_ministarter())
+    hl_groups = vim.tbl_extend('force', hl_groups, l.get_ministarter())
   end
 
   M.apply_highlights(hl_groups)

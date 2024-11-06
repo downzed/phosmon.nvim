@@ -1,4 +1,7 @@
-local B = {}
+local B = {
+  buffer = nil,
+  win = nil,
+}
 
 local create_buffer = function(content, title)
   local buf = vim.api.nvim_create_buf(false, true)
@@ -7,7 +10,7 @@ local create_buffer = function(content, title)
   vim.api.nvim_buf_set_option(buf, 'filetype', 'markdown')
 
   local words = {}
-  for word in content:gmatch("%S+") do
+  for word in content:gmatch('%S+') do
     table.insert(words, word)
   end
 
@@ -16,10 +19,10 @@ local create_buffer = function(content, title)
   local lines = {}
 
   for i = 1, #words, max_words_per_line do
-    table.insert(lines, table.concat(words, " ", i, math.min(i + max_words_per_line - 1, #words)))
+    table.insert(lines, table.concat(words, ' ', i, math.min(i + max_words_per_line - 1, #words)))
   end
 
-  table.insert(lines, 1, "")
+  table.insert(lines, 1, '')
   table.insert(lines, 1, title)
 
   B.lines = lines
@@ -47,13 +50,13 @@ local get_window_opts = function()
   return {
     focusable = false,
     noautocmd = true,
-    relative = "cursor",
+    relative = 'cursor',
     width = width,
     height = height,
     row = 0, -- position just below the cursor
     col = 0, -- position slightly to the right of the cursor
-    style = "minimal",
-    border = "rounded",
+    style = 'minimal',
+    border = 'rounded',
   }
 end
 
@@ -84,37 +87,41 @@ end
 -- end
 
 local auto_close = function(_, buf)
-  vim.api.nvim_buf_set_keymap(
-    buf,
-    'n',
-    'q',
-    ':close<CR>',
-    { noremap = true, silent = true }
-  )
+  vim.api.nvim_buf_set_keymap(buf, 'n', 'q', ':close<CR>', { noremap = true, silent = true })
 end
 
 B.open_split = function(content)
   local lines = {}
-  for line in (content .. '\n'):gmatch("(.-)\n") do
+  for line in (content .. '\n'):gmatch('(.-)\n') do
     table.insert(lines, line)
   end
 
-  vim.cmd("vsplit :enew")
+  if B.buffer ~= nil and B.win ~= nil then
+    if vim.api.nvim_win_is_valid(B.win) and vim.api.nvim_buf_is_valid(B.buffer) then
+      -- append lines to existing buffer
+      vim.api.nvim_buf_set_lines(B.buffer, -1, -1, false, lines)
+      vim.api.nvim_command('normal! gg=G')
+      return
+    end
+  end
+  vim.cmd('vsplit :enew')
 
   local buf = vim.api.nvim_get_current_buf()
+  B.buffer = buf
   local win = vim.api.nvim_get_current_win()
+  B.win = win
 
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-  vim.api.nvim_win_set_option(0, 'wrap', true)          -- Enable line wrapping in the split window
+  vim.api.nvim_win_set_option(0, 'wrap', true) -- Enable line wrapping in the split window
   vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe') -- Wipe the buffer when it's no longer displayed
   vim.api.nvim_buf_set_option(buf, 'buftype', 'nofile')
   vim.api.nvim_buf_set_option(buf, 'filetype', 'markdown')
   -- set buffer name
-  vim.api.nvim_buf_set_name(buf, "[phosmon.ai]")
+  vim.api.nvim_buf_set_name(buf, '[phosmon.ai]')
 
   -- half width
-  vim.api.nvim_win_set_width(0, vim.o.columns / 2)
-  vim.api.nvim_command("normal! gg=G")
+  vim.api.nvim_win_set_width(win, math.floor(vim.api.nvim_win_get_width(win) / 2))
+  vim.api.nvim_command('normal! gg=G')
 
   -- Focus the prompt window
   vim.api.nvim_set_current_win(win)
@@ -123,14 +130,14 @@ B.open_split = function(content)
 end
 
 B.open_tooltip = function(content)
-  local model_name = require("phosmon.config").get_ai_model()
-  local title = "Model: `" .. model_name .. "`  󰢚  [phosmon.ai]"
+  local model_name = require('phosmon.config').get_ai_model()
+  local title = 'Model: `' .. model_name .. '`  󰢚  [phosmon.ai]'
   local buf = create_buffer(content, title)
   local opts = get_window_opts()
 
   local win = vim.api.nvim_open_win(buf, true, opts)
 
-  vim.api.nvim_command("normal! gg=G")
+  vim.api.nvim_command('normal! gg=G')
   auto_close(win, buf)
 end
 

@@ -1,9 +1,9 @@
 local M = {}
 
 M.get_hlgroups = function()
-  local options = require("phosmon.config").get_options()
-  local palette = require("phosmon.colorscheme.colors").get_palette()
-  local is_light = options.mode == "light"
+  local options = require('phosmon.config').get_options()
+  local palette = require('phosmon.colorscheme.colors').get_palette()
+  local is_light = options.mode == 'light'
   local is_transparent = options.transparent
 
   local highlights = {
@@ -25,13 +25,16 @@ M.get_hlgroups = function()
     ModeMsg = { bg = false, fg = palette.light_gray },
     Todo = { bg = palette.bg, fg = palette.pink, bold = true },
     Underlined = { bg = false, fg = palette.fg, underline = true },
-    StatusLine = { bg = is_transparent and "NONE" or palette.statusline_bg, fg = palette.statusline_fg },
+    StatusLine = {
+      bg = is_transparent and 'NONE' or palette.statusline_bg,
+      fg = palette.statusline_fg,
+    },
     StatusLineNC = { bg = palette.cursorline_bg, fg = palette.light_gray },
     WildMenu = { bg = palette.cursorline_bg, fg = palette.red },
     VertSplit = { bg = palette.cursorline_bg, fg = palette.dark_gray },
     Title = { bg = false, fg = palette.fg, bold = true },
     LineNr = { bg = false, fg = palette.dark_gray },
-    CursorLineNr = { bg = "NONE", fg = palette.teal },
+    CursorLineNr = { bg = 'NONE', fg = palette.teal },
     Cursor = { bg = palette.purple, fg = palette.fg },
     CursorLine = { bg = palette.cursorline_bg, fg = false },
     ColorColumn = { bg = palette.cursorline_bg, fg = false },
@@ -61,14 +64,14 @@ M.get_hlgroups = function()
     helpHyperTextJump = { fg = palette.red, bg = palette.bg },
 
     -- Treesitter
-    ["@none"] = { bg = false, fg = false },
-    ["@markup.strong"] = { bold = true },
-    ["@markup.underline"] = { underline = true },
-    ["@markup.strikethrough"] = { strikethrough = true },
-    ["@text.strong"] = { bold = true },
-    ["@text.emphasis"] = { italic = true },
-    ["@text.underline"] = { underline = true },
-    ["@text.strike"] = { strikethrough = true },
+    ['@none'] = { bg = false, fg = false },
+    ['@markup.strong'] = { bold = true },
+    ['@markup.underline'] = { underline = true },
+    ['@markup.strikethrough'] = { strikethrough = true },
+    ['@text.strong'] = { bold = true },
+    ['@text.emphasis'] = { italic = true },
+    ['@text.underline'] = { underline = true },
+    ['@text.strike'] = { strikethrough = true },
   }
 
   return highlights
