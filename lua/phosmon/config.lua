@@ -10,7 +10,7 @@ M.defaults = {
   },
   ai = {
     enable = true,
-    model = 'codegeex4',
+    model = 'qwen2.5-coder:7b',
     port = '11434',
   },
   enable = {

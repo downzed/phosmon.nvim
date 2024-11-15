@@ -13,7 +13,8 @@ M.start = function()
   end
 
   vim.defer_fn(function()
-    logger.info('running in the background')
+    local model_name = config.get_ai_model()
+    logger.info('running ' .. model_name .. ' in the background')
   end, 1000)
 end
 
