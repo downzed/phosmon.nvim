@@ -3,6 +3,7 @@ local job = require('phosmon.ai.job')
 local utils = require('phosmon.ai.utils')
 
 local M = {}
+
 local gen_types = {
   docstring = 'Docstring',
   testsuite = 'Test Suite',
@@ -29,7 +30,6 @@ local get_params_for_gen = function(content_type, term)
 
   return {
     messages = messages,
-    format = 'markdown',
   }
 end
 
