@@ -3,7 +3,7 @@ local logger = require('phosmon.logger')
 local M = {}
 
 local handle_on_stderr = function(_, res)
-  if res ~= nil then
+  if res ~= nil or res ~= '' then
     if type(res) == 'string' then
       logger.error(res)
     elseif table.concat(res, '\n') ~= '' then

@@ -21,7 +21,6 @@ local get_params_for_lsp = function(term, lsp_symbol)
 
   return {
     messages = messages,
-    format = 'markdown',
   }
 end
 

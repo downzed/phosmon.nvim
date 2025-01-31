@@ -133,6 +133,8 @@ B.open_tooltip = function(content)
   local model_name = require('phosmon.config').get_ai_model()
   local title = 'Model: `' .. model_name .. '`  󰢚  [phosmon.ai]'
   local buf = create_buffer(content, title)
+  vim.api.nvim_buf_set_option(buf, 'filetype', 'markdown')
+
   local opts = get_window_opts()
 
   local win = vim.api.nvim_open_win(buf, true, opts)

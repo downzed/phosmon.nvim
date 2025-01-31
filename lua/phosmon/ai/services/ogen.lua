@@ -3,6 +3,7 @@ local job = require('phosmon.ai.job')
 local utils = require('phosmon.ai.utils')
 
 local M = {}
+
 local gen_types = {
   docstring = 'Docstring',
   testsuite = 'Test Suite',
@@ -29,7 +30,6 @@ local get_params_for_gen = function(content_type, term)
 
   return {
     messages = messages,
-    format = 'markdown',
   }
 end
 
@@ -40,8 +40,8 @@ local handle_stdout = function(_, data, event)
 
   local ok, decoded = pcall(utils.decode_from_json, data[1])
 
-  if not ok or (decoded and decoded.error) then
-    job.handle_on_stderr(_, (decoded and decoded.error))
+  if not ok and decoded ~= nil and decoded.error then
+    job.handle_on_stderr(_, decoded.error)
     return
   end
 
