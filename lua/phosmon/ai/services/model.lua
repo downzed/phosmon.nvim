@@ -23,10 +23,11 @@ M.stop = function()
   local small_ok = pcall(io.popen, 'killall ollama')
 
   if not capital_ok or not small_ok then
-    return 'Failed to stop ollama'
+    logger.error('Failed to stop Ollama')
+    return
   end
 
-  logger.info('stopped')
+  logger.info('Ollama stopped')
 end
 
 M.toggle = function()
@@ -71,13 +72,14 @@ local handle_list_stdout = function(_, data, event)
   local ok, res = pcall(utils.decode_from_json, data[1])
   if not ok or (res and res.error) then
     job.handle_on_stderr(_, (res and res.error))
+    logger.error('Failed to get model list')
     return
   end
 
   local list = {}
 
-  if not res or not res.models then
-    logger.error('Failed to get model list')
+  if res ~= nil and not res.models then
+    logger.warn('Failed to get model list')
     return
   end
 
