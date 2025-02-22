@@ -1,8 +1,9 @@
 local M = {}
 
----@class Options
+--- @class Options
 M.defaults = {
   transparent = false,
+  --- @type 'dark' | 'light' | 'photon'
   mode = 'dark',
   custom_colors = nil,
   colorscheme = {
@@ -10,16 +11,12 @@ M.defaults = {
   },
   ai = {
     enable = true,
-    model = 'qwen2.5-coder:7b',
+    model = 'codellama:latest',
     port = '11434',
-  },
-  enable = {
-    ministarter = true,
-    fzf_lua = true,
   },
 }
 
----@type Options
+--- @type Options
 M.options = {}
 
 local modes = { 'dark', 'light', 'photon' }

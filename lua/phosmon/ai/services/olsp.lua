@@ -11,11 +11,11 @@ local get_params_for_lsp = function(term, lsp_symbol)
   table.insert(messages, system)
   table.insert(messages, {
     role = 'user',
-    content = 'Give me a concise exaplantion of the next symbol definition: '
+    content = 'Give me a concise explanation of the following symbol definition,\n'
       .. lsp_symbol
-      .. ' and '
+      .. '\n Term: '
       .. term
-      .. 'in '
+      .. '\n Filetype: '
       .. vim.bo.filetype,
   })
 

@@ -51,6 +51,7 @@ local handle_stdout = function(_, data, event)
 end
 
 --- @param gen_type "docstring" | "testsuite" | "tsinterface"
+--- @return nil
 M.run = function(gen_type)
   local _, term = utils.get_visual_selection()
 
