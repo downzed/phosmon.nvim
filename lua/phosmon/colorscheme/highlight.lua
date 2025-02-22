@@ -26,15 +26,7 @@ M.set_hlgroups = function()
 
   hl_groups = vim.tbl_extend('force', hl_groups, l.get_treesitter())
 
-  local opts = require('phosmon.config').get_options()
-
-  if opts.enable.fzf_lua then
-    hl_groups = vim.tbl_extend('force', hl_groups, l.get_fzf_lua())
-  end
-
-  if opts.enable.ministarter then
-    hl_groups = vim.tbl_extend('force', hl_groups, l.get_ministarter())
-  end
+  -- local opts = require('phosmon.config').get_options()
 
   M.apply_highlights(hl_groups)
 end

@@ -12,9 +12,9 @@ Using lazy.nvim:
         -- leave empty for default options
         mode = "dark", -- "dark" | "light" | "photon",
         transparent = false,
-        enable = {
-            ministarter = true,
-            fzf_lua = true
+        ai = {
+            enable = true,
+            model = "codellama:latest"
         }
     },
 }
@@ -34,8 +34,6 @@ colorscheme phosmon
 | --- | --- | --- |
 | `mode` | `dark` | Select between `light`, `dark`, `photon` |
 | `transparent` | `false` | Enable transparent background |
-| `enable.ministarter` | `true` | Enable mini-starter |
-| `enable.fzf_lua` | `true` | Enable fzf-lua |
 
 ### Features
 `phosmon` will load some utils:
@@ -46,9 +44,6 @@ colorscheme phosmon
 ### Integrations
 - [x] light theme ~(available, but in progress)~
 - [x] lualine
-- [x] tree-sitter (might be off)
-- [x] fzf-lua (might be off)
-- [x] mini.starter
 - [ ] more to come
 - [ ] suggestions?
 
