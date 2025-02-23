@@ -51,7 +51,7 @@ end
 local format_item = function(item)
   local current_model = require('phosmon.config').get_ai_model()
   if item == current_model then
-    return item .. ' (current)'
+    return item .. ' ()'
   end
 
   return item
@@ -116,15 +116,13 @@ local handle_pull_stdout = function(_, data, event)
 end
 
 M.list = function()
-  local ai_opts = config.get_ai_options()
-  local cmd = string.format('curl --silent http://localhost:' .. ai_opts.port .. '/api/tags')
+  local cmd = string.format('curl --silent http://' .. os.getenv('OLLAMA_HOST') .. '/api/tags')
   local msg = 'Refreshing list'
 
   job.handle_the_job(cmd, msg, handle_list_stdout)
 end
 
 M.pull = function()
-  local ai_opts = config.get_ai_options()
   vim.ui.input({ prompt = '󰢚 [phosmon.ai] Model name: ' }, function(model)
     if model == nil then
       logger.warn('No model name provided')
@@ -136,7 +134,7 @@ M.pull = function()
     local body = utils.encode_to_json({ model = model, stream = false })
 
     local cmd =
-      string.format('curl --silent http://localhost:' .. ai_opts.port .. '/api/pull -d %s', body)
+      string.format('curl --silent http://' .. os.getenv('OLLAMA_HOST') .. '/api/pull -d %s', body)
 
     local msg = 'Pulling `' .. model .. '`'
 

@@ -43,7 +43,6 @@ end
 
 M.run = function()
   local term = vim.fn.expand('<cword>')
-  local ai_opts = require('phosmon.config').get_ai_options()
 
   utils.get_symbol_info(function(lsp_symbol)
     local params = get_params_for_lsp(term, lsp_symbol)
@@ -58,7 +57,7 @@ M.run = function()
     local body = utils.encode_to_json(data)
 
     local cmd = string.format(
-      'curl --silent --no-buffer http://localhost:' .. ai_opts.port .. '/api/chat -d %s',
+      'curl --silent --no-buffer http://' .. os.getenv('OLLAMA_HOST') .. '/api/chat -d %s',
       body
     )
 
