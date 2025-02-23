@@ -8,24 +8,31 @@ local gen_types = {
   docstring = 'Docstring',
   testsuite = 'Test Suite',
   tsinterface = 'TypeScript Interface',
+  refactor = 'Refactor',
 }
 
 local get_params_for_gen = function(content_type, term)
   local system = require('phosmon.ai.services.msg_templates').get_docstring_system()
-  if content_type == gen_types.testsuite then
-    system = require('phosmon.ai.services.msg_templates').get_testsuite_system()
-  end
+  local templates = require('phosmon.ai.services.msg_templates')
 
-  if content_type == gen_types.tsinterface then
-    system = require('phosmon.ai.services.msg_templates').get_tsinterface_system()
+  local is_refactor = content_type == gen_types.refactor
+  if content_type == gen_types.testsuite then
+    system = templates.get_testsuite_system()
+  elseif content_type == gen_types.tsinterface then
+    system = templates.get_tsinterface_system()
+  elseif is_refactor then
+    system = templates.get_refactor_system()
   end
 
   local messages = {}
 
+  local content = is_refactor and 'Improve and optimize the following code:\n' .. term
+    or 'Create a ' .. content_type .. ' for this code: ' .. term
+
   table.insert(messages, system)
   table.insert(messages, {
     role = 'user',
-    content = 'Create a ' .. content_type .. ' for this code: ' .. term,
+    content = content,
   })
 
   return {
@@ -50,12 +57,11 @@ local handle_stdout = function(_, data, event)
   end
 end
 
---- @param gen_type "docstring" | "testsuite" | "tsinterface"
+--- @param gen_type "docstring" | "testsuite" | "tsinterface" | "refactor"
 --- @return nil
 M.run = function(gen_type)
   local _, term = utils.get_visual_selection()
-
-  local ai_opts = require('phosmon.config').get_ai_options()
+  local is_refactor = gen_type == 'refactor'
 
   local content_type = gen_types[gen_type]
 
@@ -71,11 +77,14 @@ M.run = function(gen_type)
   local body = utils.encode_to_json(data)
 
   local cmd = string.format(
-    'curl --silent --no-buffer http://localhost:' .. ai_opts.port .. '/api/chat -d %s',
+    'curl --silent --no-buffer http://' .. os.getenv('OLLAMA_HOST') .. '/api/chat -d %s',
     body
   )
 
   local msg = 'Generating ' .. content_type
+  if is_refactor then
+    msg = 'Refactoring '
+  end
 
   job.handle_the_job(cmd, msg, handle_stdout)
 end

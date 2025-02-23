@@ -6,10 +6,10 @@ local M = {}
 
 M.setup = function()
   model.start()
-  vim.keymap.set('n', '<leader>Pa', olsp.run, {
+  vim.keymap.set('n', '<leader>Pl', olsp.run, {
     noremap = true,
     silent = true,
-    desc = require('phosmon.logger').notify_opts.title .. ' run LSP',
+    desc = require('phosmon.logger').notify_opts.title .. ' [L]SP',
   })
 
   vim.keymap.set('v', '<leader>Pd', function()
@@ -17,7 +17,7 @@ M.setup = function()
   end, {
     noremap = true,
     silent = true,
-    desc = require('phosmon.logger').notify_opts.title .. ' [D]ocstring Gen',
+    desc = require('phosmon.logger').notify_opts.title .. ' [D]ocstring',
   })
 
   vim.keymap.set('v', '<leader>Pt', function()
@@ -25,7 +25,7 @@ M.setup = function()
   end, {
     noremap = true,
     silent = true,
-    desc = require('phosmon.logger').notify_opts.title .. ' [T]estsuite Gen',
+    desc = require('phosmon.logger').notify_opts.title .. ' [T]estsuite',
   })
 
   vim.keymap.set('v', '<leader>Ps', function()
@@ -33,7 +33,14 @@ M.setup = function()
   end, {
     noremap = true,
     silent = true,
-    desc = require('phosmon.logger').notify_opts.title .. ' Type[S]cript Interface Gen',
+    desc = require('phosmon.logger').notify_opts.title .. ' Type[S]cript Interface',
+  })
+  vim.keymap.set('v', '<leader>Pr', function()
+    ogen.run('refactor')
+  end, {
+    noremap = true,
+    silent = true,
+    desc = require('phosmon.logger').notify_opts.title .. ' [R]efactor',
   })
 end
 

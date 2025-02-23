@@ -12,7 +12,6 @@ M.defaults = {
   ai = {
     enable = true,
     model = 'codellama:latest',
-    port = '11434',
   },
 }
 
@@ -21,7 +20,7 @@ M.options = {}
 
 local modes = { 'dark', 'light', 'photon' }
 
----description: Validate phosmon mode
+--- @description: Validate phosmon mode
 local function validate_mode(mode)
   if not vim.tbl_contains(modes, mode) then
     vim.notify_once("phosmon.nvim: invalid mode '" .. mode .. "', defaulting to 'dark'")
@@ -31,7 +30,7 @@ local function validate_mode(mode)
   return mode
 end
 
----description: Setup phosmon
+--- @description: Setup phosmon
 M.setup = function(user_config)
   M.options = vim.tbl_deep_extend('force', M.defaults, user_config or {})
 end

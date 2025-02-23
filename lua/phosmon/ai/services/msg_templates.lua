@@ -69,4 +69,19 @@ M.get_tsinterface_system = function()
   }
 end
 
+M.get_refactor_system = function()
+  return {
+    role = 'system',
+    content = 'You are a code refactoring expert.'
+      .. ' Your task is to improve and optimize the given code while preserving its original functionality.'
+      .. ' Ensure the code follows best practices for the filetype: '
+      .. vim.bo.filetype
+      .. '.'
+      .. ' Your response should only contain the improved code with no additional explanations.'
+      .. ' Example refactoring improvements:\n'
+      .. '- **Go:** Improve readability, use idiomatic Go patterns, optimize performance.\n'
+      .. '- **JavaScript:** Convert to modern ES6+ syntax, remove redundant logic.\n'
+      .. '- **Lua:** Use cleaner function definitions, optimize for Neovim performance.',
+  }
+end
 return M
