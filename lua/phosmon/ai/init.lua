@@ -14,6 +14,12 @@ local map_keys = function(mode, keys, func, desc)
 end
 
 M.setup = function()
+  if not os.getenv('OLLAMA_HOST') then
+    logger.error('OLLAMA_HOST is not set')
+    logger.info('Please set OLLAMA_HOST in your environment files')
+    return
+  end
+
   model.start()
 
   map_keys('n', '<leader>Pl', olsp.run, '[L]SP')
