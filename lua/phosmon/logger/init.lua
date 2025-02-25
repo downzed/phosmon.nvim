@@ -14,11 +14,15 @@ local logger = {
 --- @return `vim.notify` function
 local function log(level, msg, opts)
   local notify = vim.notify
-  local options = vim.tbl_deep_extend('force', logger.notify_opts, opts or {})
-  return notify(' 󰢚 ' .. options.title .. ' ' .. msg, vim.log.levels[level], options)
+  if opts == nil then
+    opts = {}
+  end
+  local options = vim.tbl_deep_extend('force', logger.notify_opts, opts)
+  return notify('󰢚 ' .. options.title .. ' ' .. msg, vim.log.levels[level], options)
 end
 
 logger.info = function(msg, opts)
+  opts = opts or {}
   log('INFO', msg, opts)
 end
 
