@@ -1,54 +1,78 @@
 # phosmon.nvim
-> A simple attempt to port [`photon.vim`](https://github.com/axvr/photon.vim) to `phosmon.nvim`
+> `phosmon.nvim` is a lightweight, monotone colorscheme designed for Neovim, inspired by [photon.vim](https://github.com/axvr/photon.vim). 
+> Over time, it has evolved to include *local AI-powered features* using [Ollama](https://ollama.com), allowing users to interact with AI models directly inside Neovim.
 
-`phosmon.nvim` is a minimal, monotone (as possible) colorscheme designed for Neovim, trying to preserve the aesthetics of the original `photon.vim` theme while using the benefits of Lua.
-
-### Installation
+### 📦 Installation 
 Using lazy.nvim:
 ```
 {
     "downzed/phosmon.nvim",
     opts = {
-        -- leave empty for default options
-        mode = "dark", -- "dark" | "light" | "photon",
+        -- Leave empty for default options
+        mode = "dark", -- "dark" | "light" | "photon"
         transparent = false,
         ai = {
-            enable = true,
-            model = "codellama:latest"
+            enable = true, -- Enable AI features (requires Ollama)
+            model = "codellama:latest" -- Default AI model
         }
     },
 }
 ```
 
-### Usage
+
+### 🎨 Colorscheme Usage 
 ```
 vim.cmd("colorscheme phosmon")
-
--- or
+-- or --
 colorscheme phosmon
 ```
 
 
-#### Default options
+### ⚙️ Configuration 
 | Option | Default | Description |
 | --- | --- | --- |
 | `mode` | `dark` | Select between `light`, `dark`, `photon` |
 | `transparent` | `false` | Enable transparent background |
+| `ai.enable` | `false` | Enable AI features |
+| `ai.model` | `"codellama:latest"` | Default AI model |
 
-### Features
-`phosmon` will load some utils:
-- [x] `Phosmon toggle opacity`
-- [x] `Phosmon select mode`
+### 🤖 AI Features (Ollama Integration)
+To enable AI-powered features, Ollama must be installed:
+- Download from [Ollama/download](https://ollama.com/download) (macOS, win) or [Github](https://github.com/ollama/ollama) (linux, macOS)
+- Set the OLLAMA_HOST environment variable (e.g., in `.zshrc` or `.bashrc`):
+<br /> `export OLLAMA_HOST="http://localhost:11434"`
+
+### 📝 Command Reference
+Once phosmon.nvim is enabled, it provides the following commands:
+- All commands are prefixed with `Phosmon` (e.g., `:Phosmon toggle opacity`)
+
+| Command | Description |
+| --- | --- |
+| `toggle opacity` | Toggles background opacity |
+| `select mode` | Selects between dark, light, or photon mode |
+| `toggle ai` | Enables/disables AI features |
+| `ai select_model` | Lists available AI models |
+| `ai pull_model` | Pulls the specified AI model from Ollama |
+
+### 🔥 AI-Powered Code Generation & LSP Enhancements
+`phosmon.nvim` extends Neovim’s capabilities with AI-powered code generation and LSP utilities, using Ollama models.
+
+##### LSP
+| Keybinding | Mode |	Action |
+| --- | --- | --- |
+| `<leader>Pl` | Normal | Run AI-assisted LSP operation |
+
+##### Code Generation
+| Keybinding | Mode |	Action |
+| --- | --- | --- |
+| `<leader>Pr` | Visual | AI-assisted refactor |
+| `<leader>Ps` | Visual | Generate TypeScript interface |
+| `<leader>Pt` | Visual | Generate test suite |
+| `<leader>Pd` | Visual | Generate docstrings |
+> Select the relevant code in visual mode (v), then use the shortcut to trigger AI-generated content
 
 
-### Integrations
-- [x] light theme ~(available, but in progress)~
-- [x] lualine
-- [ ] more to come
-- [ ] suggestions?
-
-
-### Screenshots
+### 📸 Screenshots
 | dark                            | light                           | photon  |
 | ----------------------------------- | ----------------------------------- |----------------------------------- |
 | [![dark](./screenshots/dark.png)](./screenshots/dark.png) | [![light](./screenshots/light.png)](./screenshots/light.png) | [![photon](./screenshots/photon.png)](./screenshots/photon.png) |
@@ -57,6 +81,6 @@ colorscheme phosmon
 
 
 
-### Contributing
-Contributions are welcome! Feel free to submit issues or pull requests to enhance this port.
-I probably missed something, and I'm color-blind, so be gentle.
+### 🤝 Contributing
+Contributions are welcome! If you spot issues or have improvements, feel free to submit an issue or a pull request. <br />
+I probably missed something, and I’m color-blind, so be gentle.
