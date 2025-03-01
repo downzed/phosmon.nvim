@@ -6,6 +6,33 @@ local M = {}
 --- @return nil
 --- @usage `Phosmon toggle opacity`
 M.set_commands = function()
+  vim.api.nvim_create_user_command('PhosmonLight', function()
+    require('phosmon.config').set_mode('light')
+    vim.o.background = 'light'
+    require('phosmon.colorscheme.highlight').set_hlgroups()
+  end, {
+    nargs = '*',
+    desc = 'Set phosmon to light mode',
+  })
+
+  vim.api.nvim_create_user_command('PhosmonDark', function()
+    require('phosmon.config').set_mode('dark')
+    vim.o.background = 'dark'
+    require('phosmon.colorscheme.highlight').set_hlgroups()
+  end, {
+    nargs = '*',
+    desc = 'Set phosmon to dark mode',
+  })
+
+  vim.api.nvim_create_user_command('PhosmonPhoton', function()
+    require('phosmon.config').set_mode('photon')
+    vim.o.background = 'dark'
+    require('phosmon.colorscheme.highlight').set_hlgroups()
+  end, {
+    nargs = '*',
+    desc = 'Set phosmon to photon mode',
+  })
+
   vim.api.nvim_create_user_command('Phosmon', function(opts)
     local args = vim.split(opts.args, ' ')
     if #args == 2 and args[1] == 'toggle' then
