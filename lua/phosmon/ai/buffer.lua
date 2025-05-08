@@ -1,5 +1,5 @@
-local B = {
-  buffer = nil,
+local state = {
+  buf = nil,
   win = nil,
 }
 
@@ -25,8 +25,8 @@ local create_buffer = function(content, title)
   table.insert(lines, 1, '')
   table.insert(lines, 1, title)
 
-  B.lines = lines
-  B.buffer = buf
+  state.lines = lines
+  state.buf = buf
 
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 
@@ -42,7 +42,7 @@ local calculate_dynamic_width = function(lines)
 end
 
 local get_window_opts = function()
-  local lines = B.lines
+  local lines = state.lines
 
   local width = calculate_dynamic_width(lines)
   local height = #lines
@@ -90,16 +90,16 @@ local auto_close = function(_, buf)
   vim.api.nvim_buf_set_keymap(buf, 'n', 'q', ':close<CR>', { noremap = true, silent = true })
 end
 
-B.open_split = function(content)
+state.open_split = function(content)
   local lines = {}
   for line in (content .. '\n'):gmatch('(.-)\n') do
     table.insert(lines, line)
   end
 
-  if B.buffer ~= nil and B.win ~= nil then
-    if vim.api.nvim_win_is_valid(B.win) and vim.api.nvim_buf_is_valid(B.buffer) then
+  if state.buf ~= nil and state.win ~= nil then
+    if vim.api.nvim_win_is_valid(state.win) and vim.api.nvim_buf_is_valid(state.buf) then
       -- append lines to existing buffer
-      vim.api.nvim_buf_set_lines(B.buffer, -1, -1, false, lines)
+      vim.api.nvim_buf_set_lines(state.buf, -1, -1, false, lines)
       vim.api.nvim_command('normal! gg=G')
       return
     end
@@ -107,9 +107,9 @@ B.open_split = function(content)
   vim.cmd('vsplit :enew')
 
   local buf = vim.api.nvim_get_current_buf()
-  B.buffer = buf
+  state.buf = buf
   local win = vim.api.nvim_get_current_win()
-  B.win = win
+  state.win = win
 
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
   vim.api.nvim_win_set_option(0, 'wrap', true) -- Enable line wrapping in the split window
@@ -129,7 +129,7 @@ B.open_split = function(content)
   -- chat_prompt(buf)
 end
 
-B.open_tooltip = function(content)
+state.open_tooltip = function(content)
   local model_name = require('phosmon.config').get_ai_model()
   local title = 'Model: `' .. model_name .. '`  󰢚  [phosmon.ai]'
   local buf = create_buffer(content, title)
@@ -141,6 +141,62 @@ B.open_tooltip = function(content)
 
   vim.api.nvim_command('normal! gg=G')
   auto_close(win, buf)
+end
+
+-- Function to create or update a bottom modal window
+state.open_bottom_window = function(content)
+  print(content)
+  local model_name = require('phosmon.config').get_ai_model()
+  local title = 'Model: `' .. model_name .. '`  󰢚  [phosmon.ai]'
+  local joined_content = table.concat(content, ' ')
+
+  if state.buf ~= nil and state.win ~= nil then
+    if vim.api.nvim_win_is_valid(state.win) and vim.api.nvim_buf_is_valid(state.buf) then
+      -- Append new content lines, preserving title
+      vim.api.nvim_buf_set_lines(state.buf, 2, -1, false, { joined_content })
+      vim.api.nvim_set_current_win(state.win)
+      return
+    end
+  end
+
+  -- Create new bottom modal window
+  local buf = create_buffer(content, title)
+  state.buf = buf
+
+  local win_opts = {
+    relative = 'editor',
+    anchor = 'SW',
+    row = vim.o.lines - 1, -- Bottom of the screen
+    col = 0,
+    width = vim.o.columns, -- Full width
+    height = 10, -- Fixed height
+    border = 'single', -- Modal-like border
+    style = 'minimal', -- No statusline or number column
+    zindex = 50, -- Ensure it appears above other windows
+  }
+  local win = vim.api.nvim_open_win(buf, true, win_opts)
+  state.win = win
+
+  -- Set buffer options
+  vim.api.nvim_buf_set_option(buf, 'filetype', 'markdown')
+
+  -- Set window options
+  vim.api.nvim_win_set_option(win, 'wrap', true)
+  vim.api.nvim_win_set_option(win, 'cursorline', false)
+  vim.api.nvim_win_set_option(win, 'number', false)
+  vim.api.nvim_win_set_option(win, 'relativenumber', false)
+
+  -- Format content
+  vim.api.nvim_command('normal! gg=G')
+
+  -- Auto-close
+  auto_close(win, buf)
+end
+
+local B = state
+
+B.get_state = function()
+  return state
 end
 
 return B

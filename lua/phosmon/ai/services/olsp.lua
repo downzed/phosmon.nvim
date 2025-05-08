@@ -24,21 +24,51 @@ local get_params_for_lsp = function(term, lsp_symbol)
   }
 end
 
+local state = {
+  content_words = {},
+}
+
 local handle_stdout = function(_, data, event)
+  if not data or not data[1] then
+    return
+  end
+
   if event == 'stderr' or not data then
     job.handle_on_stderr(_, data)
   end
 
-  local ok, decoded = pcall(utils.decode_from_json, data[1])
+  for _, line in ipairs(data) do
+    if line == '' then
+      goto continue
+    end -- Skip empty lines
 
-  if not ok or (decoded and decoded.error) then
-    job.handle_on_stderr(_, (decoded and decoded.error))
-    return
+    local ok, decoded = pcall(utils.decode_from_json, line)
+
+    if not ok or (decoded and decoded.error) then
+      job.handle_on_stderr(_, (decoded and decoded.error) or 'Invalid JSON')
+      return
+    end
+
+    -- Check for message content in the streamed chunk
+    if decoded and decoded.message and decoded.message.content then
+      table.insert(state.content_words, decoded.message.content)
+      -- buffer.open_bottom_window(decoded.message.content)
+      buffer.open_bottom_window(state.content_words)
+    end
+
+    ::continue::
   end
 
-  if decoded and decoded.message and decoded.message.content then
-    buffer.open_tooltip(decoded.message.content)
-  end
+  -- local ok, decoded = pcall(utils.decode_from_json, data[1])
+  --
+  -- if not ok or (decoded and decoded.error) then
+  --   job.handle_on_stderr(_, (decoded and decoded.error))
+  --   return
+  -- end
+  --
+  -- if decoded and decoded.message and decoded.message.content then
+  --   buffer.open_tooltip(decoded.message.content)
+  -- end
 end
 
 M.run = function()
@@ -50,7 +80,7 @@ M.run = function()
     local model = require('phosmon.config').get_ai_model()
 
     local data = vim.tbl_extend('force', params, {
-      stream = false,
+      stream = true,
       model = model,
     })
 
